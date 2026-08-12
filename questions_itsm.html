@@ -1,0 +1,2902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ServiceNow Certification Practice Questionnaire</title>
+  <style>
+    :root {
+      --primary: #293e40;
+      --accent: #81b29a;
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --text: #2d3142;
+      --border: #e0e4e8;
+      --correct: #2e7d32;
+      --correct-bg: #e8f5e9;
+      --wrong: #c62828;
+      --wrong-bg: #ffebee;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* Sticky Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .header-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-title h1 { font-size: 1.25rem; font-weight: 600; }
+    .header-title p { font-size: 0.85rem; opacity: 0.8; }
+    
+    .progress-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+    .progress-bar-bg {
+      width: 120px;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .result-banner {
+      display: none;
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-top: 6px solid var(--accent);
+    }
+    .result-banner.pass { border-color: var(--correct); }
+    .result-banner.fail { border-color: var(--wrong); }
+    .result-score { font-size: 2rem; font-weight: 700; margin: 8px 0; }
+
+    .q-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform 0.15s ease;
+    }
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .q-number {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .q-badge {
+      font-size: 0.75rem;
+      background: #eef2f5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #666;
+    }
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+
+    .options-list { list-style: none; }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .option-item:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+    .option-item input { margin-top: 4px; cursor: pointer; }
+    .option-label { flex: 1; font-size: 0.95rem; cursor: pointer; }
+
+    /* Post-submit states */
+    .q-card.correct-card { border-left: 5px solid var(--correct); }
+    .q-card.wrong-card { border-left: 5px solid var(--wrong); }
+    .option-item.correct-ans { background: var(--correct-bg); border-color: var(--correct); font-weight: 600; }
+    .option-item.wrong-ans { background: var(--wrong-bg); border-color: var(--wrong); }
+
+    .explanation {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+      border-radius: 4px;
+      font-size: 0.88rem;
+      color: #475569;
+    }
+
+    /* Fixed Actions Footer */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+    }
+    .footer-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: #e2e8f0; color: #334155; }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .btn-reset { background: #fee2e2; color: #991b1b; }
+    .btn-reset:hover { background: #fecaca; }
+
+    .save-indicator {
+      font-size: 0.8rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="header-title">
+        <h1>ServiceNow Certification Practice</h1>
+        <p id="header-subtitle">Interactive Questionnaire • Loading Questions...</p>
+      </div>
+      <div class="progress-box">
+        <span id="progress-text">0 / 0 Answered</span>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="result-banner" class="result-banner">
+      <h2 id="result-title">Exam Results</h2>
+      <div id="result-score" class="result-score">0%</div>
+      <p id="result-detail">Answered 0 out of 0 questions correctly.</p>
+    </div>
+
+    <form id="quiz-form">
+      <div id="questions-container"></div>
+    </form>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div>
+        <button type="button" class="btn btn-reset" onclick="resetForm()">Clear & Reset</button>
+        <span class="save-indicator" id="save-status">✓ Progress auto-saved</span>
+      </div>
+      <div>
+        <button type="button" class="btn btn-primary" id="submit-btn" onclick="submitExam()">Submit & Grade Exam</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Paste your raw questions array here (supports standard array format OR object format with options/answer/explanation)
+    const rawQuestions = [
+      {
+    "number": 1,
+    "question": "Where do you enable the Search as feature for an incident?",
+    "options": {
+      "A": "Incident Properties application",
+      "B": "Related Search Results table configuration",
+      "C": "Incident form design",
+      "D": "incident.deflection system property"
+    },
+    "answer": "B",
+    "explanation": "Contextual Search table configurations define how users search and attach knowledge or related records directly from forms like the Incident form."
+  },
+  {
+    "number": 2,
+    "question": "How can a customer change the default priority from 3 + Urgency 3 to Priority 4 Low?",
+    "options": {
+      "A": "Update the priority_matrix.do script",
+      "B": "Update the Priority choice list",
+      "C": "Update the Priority Choice Matrix",
+      "D": "Update the Priority Lookup Rules"
+    },
+    "answer": "D"
+  },
+  {
+    "number": 3,
+    "question": "On the Release record, what are the available options on the Release phase list?",
+    "options": {
+      "A": "Requirement Gathering, Design, Build, Roll-out, Unit Testing, User Acceptance, Pilot",
+      "B": "Scoping, Design, Develop, Deployment, Unit Testing, Integration, Pilot",
+      "C": "Analyze, Design, Development, Build, Roll-out, QA, User Acceptance",
+      "D": "Requirement Gathering, Design, Development, Build, Deployment, QA, User Acceptance"
+    },
+    "answer": "D"
+  },
+  {
+    "number": 4,
+    "question": "A new Problem Coordinator accidentally created several problem investigations that need to be deleted. What role is required to delete a problem record?",
+    "options": {
+      "A": "problem_admin",
+      "B": "problem_coordinator",
+      "C": "so_problem_delete",
+      "D": "RH_manager",
+      "E": "problem_manager"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 5,
+    "question": "Your implementation team has a new Business Analyst. They will be attending their first Service Catalog workshop and will be responsible for capturing notes and decisions from the workshop. Which Now Create assets do you recommend they review to prepare? (Choose 2 options)",
+    "options": {
+      "A": "Service Catalog and Request Mgmt - Workshop Preparation Guide",
+      "B": "Service Catalog and Request Mgmt - Process Guide",
+      "C": "IT Service Management - Typical Challenges and Remediation",
+      "D": "ITSM - Business Outcomes and Corresponding KPIs"
+    },
+    "answer": "A, B",
+    "explanation": "Workshop Preparation Guide outlines objectives, agenda, and stakeholders; Process Guide provides the technical and functional baseline for Service Catalog and Request Management."
+  },
+  {
+    "number": 6,
+    "question": "When building multiple catalog items, which components would you evaluate for consolidation and re-use? (Choose two.)",
+    "options": {
+      "A": "Sets of Variables",
+      "B": "Entitlements",
+      "C": "Icons",
+      "D": "Flows and Subflows"
+    },
+    "answer": "A, D"
+  },
+  {
+    "number": 7,
+    "question": "Your customer complains that when their users click on the Configuration Item magnifier from the Incident form, that they are overwhelmed by the volume of CIs to choose from. They want to exclude certain types of CIs from the CI lists on the Incident, Problem and Change forms. What do you recommend to your customer?",
+    "options": {
+      "A": "Use the Principal CI class checkbox to identify the CI classes that they want visible on the Incident Problem and Change forms",
+      "B": "Make a show/hide Ul action to show only the desired CIs to the itil users",
+      "C": "Add a Show field to the base cmdb table: Check the Show box on those CI records they want to display: make reference qualifier to display only the CIs with show=true",
+      "D": "Create an Access control to hide the unnecessary Cls from the itil users"
+    },
+    "answer": "A",
+    "explanation": "Once a class is set as a principal class, the principal class filter is automatically applied to the CI field on change, incident, and problem records."
+  },
+  {
+    "number": 8,
+    "question": "Your customer wants a catalog to contain two items: 1. A request with 1 approval and 2 fulfillment tasks 2. A link to a knowledge article What type of item would you use to satisfy the requirement for the Construction request?",
+    "options": {
+      "A": "Catalog Item",
+      "B": "Content Item",
+      "C": "Record Producer",
+      "D": "Order Guide"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 9,
+    "question": "Your customer wants to limit the users who ate able to see internal Network requests, to members of the Network department. Which roles would enable you to make these required changes? Choose 2 answers",
+    "options": {
+      "A": "catalog_manager",
+      "B": "catalog_admin",
+      "C": "user_criteria_admin",
+      "D": "catalog_editor"
+    },
+    "answer": "B, C"
+  },
+  {
+    "number": 10,
+    "question": "What are some good practices for guiding your customers ' use of Notifications? Choose 3 answers",
+    "options": {
+      "A": "When possible, maximize the quality or email updates to customers",
+      "B": "Use incident itil role template as the master template to build all other ITSM templates",
+      "C": "Get input from Marketing department, regarding format of customer/caller facing notifications",
+      "D": "Make sure Notification requirements and test plans are in the project scope from the start",
+      "E": "Use templates to ensure consistency and ease of configuration"
+    },
+    "answer": "B, C, D"
+  },
+  {
+    "number": 11,
+    "question": "A manager wants to run a report on the Computer catalog items, to see how many requests are being made for the add on extra memory, as compared with those requiring only the base memory. How would you meet this requirement?",
+    "options": {
+      "A": "Build report on SC Task table, Group by Variables for Computer > Extra memory",
+      "B": "Build report on Requested Item table, Group by Variables for Computer > Extra memory",
+      "C": "Build report on Task table, Group by Variables for Computer > Extra memory",
+      "D": "Build report on Request table, Group by Variables for Computer > Extra memory",
+      "E": "Build report on Catalog Item table, Group by Variables for Computer > Extra memory"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 12,
+    "question": "When using the Email Client, what is the difference between an Email Template and a Quick Message?",
+    "options": {
+      "A": "Email templates are defined by users with admin role Quick Messages are defined by users with quick_message_admin role",
+      "B": "Email Template is defined and automatically applied when the email form launches Quick Messages are defined and then can be manually applied by the user",
+      "C": "Email Templates are included with ITSM, Quick Messages are new with Machine Learning",
+      "D": "Email Templates are like forms that can be sent to the caller for completion Quick Messages are primarily used by the Chat Bot"
+    },
+    "answer": "B",
+    "explanation": "Email templates are automatically applied when the form launches, whereas Quick Messages are manually applied by the user."
+  },
+  {
+    "number": 13,
+    "question": "Which level are service commitments associated in the service portfolio taxonomy?",
+    "options": {
+      "A": "Offering",
+      "B": "Portfolio",
+      "C": "Node",
+      "D": "Service"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 14,
+    "question": "When creating a catalog, which field specifies who is able to create, modify, and publish items in the catalog?",
+    "options": {
+      "A": "Editors",
+      "B": "Item Admins",
+      "C": "Authors",
+      "D": "Item Owners"
+    },
+    "answer": "A",
+    "explanation": "The Editors field specifies who has permissions to create, modify, and publish items within the catalog."
+  },
+  {
+    "number": 15,
+    "question": "Once a Catalog Item has been requested, what mechanism determines the approvals, and tasks that are triggered in the application?",
+    "options": {
+      "A": "Processes",
+      "B": "Flows",
+      "C": "Procedures",
+      "D": "Actions",
+      "E": "Scripts"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 16,
+    "question": "The Problem table is extended from what table?",
+    "options": {
+      "A": "Outage",
+      "B": "Problem Task",
+      "C": "Task",
+      "D": "Major Incident",
+      "E": "Incident"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 17,
+    "question": "In Change Management, what does a Model State contain? (Choose two.)",
+    "options": {
+      "A": "Model State transitions conditions",
+      "B": "Model State properties",
+      "C": "Model State transition policies",
+      "D": "Model State transitions"
+    },
+    "answer": "A, D"
+  },
+  {
+    "number": 18,
+    "question": "What are key relationships between Changes and Incidents? Choose 2 answers",
+    "options": {
+      "A": "Incident owners are part of the change approval workflow",
+      "B": "Incidents can be caused by a Change",
+      "C": "A Change can resolve Incidents",
+      "D": "Incidents autoclose upon closure of a related Change"
+    },
+    "answer": "B, C"
+  },
+  {
+    "number": 19,
+    "question": "In what table are Change records stored?",
+    "options": {
+      "A": "Change [change_task]",
+      "B": "Change Request [rfc]",
+      "C": "Change Request [change_request]",
+      "D": "Change [change]",
+      "E": "Change [task_change]"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 20,
+    "question": "The State field tracks the current status of a problem record. Each state has a label, value, and constant. For the Fix in Progress state: * Label: Fix in Progress * Value: 104 * Constant: ProblemState.FIX_IN_PROGRESS Which script is used to add a pre-requisite for transitioning from the Fix in Progress state?",
+    "options": {
+      "A": "ProblemStateUtilsSNC",
+      "B": "ProblemStateUtils",
+      "C": "ProblemStateChange",
+      "D": "ProblemStateChangeSNC"
+    },
+    "answer": "B",
+    "explanation": "ProblemStateUtils extends the SNC version and is intended for customer customizations and pre-requisite state logic."
+  },
+  {
+    "number": 21,
+    "question": "On an incident record, where are the fields fiat appear on the caller lookup select box defined?",
+    "options": {
+      "A": "The ref_contributions attribute on the caller lookup form",
+      "B": "The ref_ac_column attribute from the dictionary entry",
+      "C": "The Caller lookup field on the [user] table",
+      "D": "The form design of the caller lookup form"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 22,
+    "question": "Your customer wants Problem records to be assigned automatically to the Support group associated with the CI on the problem record. Which business rule already satisfies this requirement?",
+    "options": {
+      "A": "Populate Assignment Group based on CI/SO",
+      "B": "Populate Assignment Group based on Cl Support Group",
+      "C": "Problem Assignment Group based on CI Support Group",
+      "D": "ITSM Best Practice Group Assignment"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 23,
+    "question": "A problem investigation had been previously closed, because the risk was accepted, in favor of using the workaround, instead of applying the fix. After a couple of weeks, the issue starts to occur more frequently, so management wants to re-visit the root cause analysis. What would be the next step for this problem?",
+    "options": {
+      "A": "If 7 days has passed, since the Problem was closed, it cannot be re-opened",
+      "B": "Problem Manager clicks Re-Analyze on the Problem record",
+      "C": "Problem Assignee clicks Re-Open on the Problem record",
+      "D": "Administrator clicks Re-Open on the Problem Record"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 24,
+    "question": "Incidents are stored what table?",
+    "options": {
+      "A": "Incident [incident]",
+      "B": "Incident [sn_task_incident]",
+      "C": "Incident [sn_incident]",
+      "D": "Incident [task_incident]"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 25,
+    "question": "If the Assignment group is empty on an incident record, what happens when an agent that is a member of a single user groups clicks the Assign to me UI action?",
+    "options": {
+      "A": "The agent is prompted to select the Assignment group",
+      "B": "The Assignment group field is populated with agent ' s user group",
+      "C": "The Assignment group field remains empty",
+      "D": "An error is displayed indicating the Assignment group field must be populated before executing the Assign to me Ul action"
+    },
+    "answer": "A",
+    "explanation": "Evaluated based on baseline UI Action scripts checking membership and prompting or handling single/multiple group constraints."
+  },
+  {
+    "number": 26,
+    "question": "How are Features related to Products and Releases?",
+    "options": {
+      "A": "Products have associated features, which are organized into releases",
+      "B": "Products use features to define release types",
+      "C": "Features are included in releases, not associated with products",
+      "D": "Emergency releases can include products and features"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 27,
+    "question": "If the Assignment group is empty on an incident record what happens when an agent that is a member of multiple user groups clicks the Assign to the Ul action?",
+    "options": {
+      "A": "The agent is prompted to select the Assignment group",
+      "B": "An error is displayed indicating the agent must manually assign the incident",
+      "C": "The Assignment group field will not populate",
+      "D": "The Assignment group field automatically populates with the agent ' s primary group"
+    },
+    "answer": "A",
+    "explanation": "If the Assignment group field is empty and you are a member of multiple groups, you are prompted to select the Assignment group."
+  },
+  {
+    "number": 28,
+    "question": "What are two effective measures of performance for the Problem Management process? Choose 2 answers",
+    "options": {
+      "A": "Number of Problem that have Breached SLAs",
+      "B": "Average Problem Resolution Time",
+      "C": "Percentage of Problem Resolution within SLA by Category",
+      "D": "Problems older than 30 days by Priority and State"
+    },
+    "answer": "B, D"
+  },
+  {
+    "number": 29,
+    "question": "When a Service Desk again shares a \" How to ' item with a customer what type of record is being shared?",
+    "options": {
+      "A": "Knowledge article",
+      "B": "Content object",
+      "C": "How to document",
+      "D": "Information item"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 30,
+    "question": "Unless there are particular security requirements, what role is given to users that perform request fulfillment work?",
+    "options": {
+      "A": "itil",
+      "B": "task_worker",
+      "C": "sc_fulfiller",
+      "D": "catalog_fulfiller",
+      "E": "fulfiller"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 31,
+    "question": "What paid application facilitates fast onsite IT support?",
+    "options": {
+      "A": "Check-in Kiosk",
+      "B": "Now Tech Lounge",
+      "C": "Onsite Support Now",
+      "D": "Walk-up Experience",
+      "E": "Walk-in Kiosk"
+    },
+    "answer": "D",
+    "explanation": "Walk-up Experience manages face-to-face IT support queues and technician interactions."
+  },
+  {
+    "number": 32,
+    "question": "Where are the technical approvals defined, that are executed in the Change - Normal - Asses s flow?",
+    "options": {
+      "A": "Change Assess Approval Subflow",
+      "B": "Change Approval Policy",
+      "C": "Change Approval Subflow",
+      "D": "Change Approval Matrix"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 33,
+    "question": "By default, when using Inbound actions, what happens if an email is received which has an Incident watermark?",
+    "options": {
+      "A": "Incident SLA clock is un-paused",
+      "B": "Incident record is updated, per the action ' s script",
+      "C": "Auto-reply sent to sender, recommending they use Portal chat",
+      "D": "Incident record is re-set to state = attention required"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 34,
+    "question": "The Major Incident Management (MIM) application is linked at the Incident management process but the records have in additional set of States. What are these Ml States?",
+    "options": {
+      "A": "New. Work: m progress Escalated Communicated",
+      "B": "Proposed. Accepted Rejected Cancelled",
+      "C": "Proposed Received eCAB Convened Closed",
+      "D": "Proposed Accepted Reacted Reopened"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 35,
+    "question": "What actions can a user with the itil_admin role take in support of Change Management? (Choose three.)",
+    "options": {
+      "A": "Manage Risk Assessments",
+      "B": "Delete CAB Definition",
+      "C": "Manage Risk Conditions",
+      "D": "Delete Change",
+      "E": "Create and manage Approval Policies"
+    },
+    "answer": "A, C, D"
+  },
+  {
+    "number": 36,
+    "question": "Where is the definition of what is provided, or not provided, for a service defined?",
+    "options": {
+      "A": "Vendor service agreements",
+      "B": "Service scope",
+      "C": "Service contracts",
+      "D": "Service limitations"
+    },
+    "answer": "B",
+    "explanation": "Service scope defines features, functions, boundaries, roles, and responsibilities of a service."
+  },
+  {
+    "number": 37,
+    "question": "In the life of a Problem record there are opportunities to click the Re-Analyze button and move backwards in the lifecycle. When you click the Re-Analyze button, what state Is set on the problem record?",
+    "options": {
+      "A": "Assess",
+      "B": "Root Cause Analysis",
+      "C": "Fix in Progress",
+      "D": "Draft"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 38,
+    "question": "From a data model perspective which Table is the base class for the configuration management database?",
+    "options": {
+      "A": "Base Item [cmdb_base_item]",
+      "B": "Configuration Item [cmdb_ci]",
+      "C": "Base Configuration Item (cmdb)",
+      "D": "Asset (asset)"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 39,
+    "question": "Your Problem Manager has a structured problem management process, which includes a final review of the solution implemented and of the data regarding incident reduction. When a problem is resolved, after implementing a fix, they want the Post Fix Review task to be automatically created and assigned to the Problem assignee. What feature would you use to meet this requirement?",
+    "options": {
+      "A": "State Model",
+      "B": "Workflow Dashboard",
+      "C": "Action Modeler",
+      "D": "Task Creator",
+      "E": "Flow Designer"
+    },
+    "answer": "E"
+  },
+  {
+    "number": 40,
+    "question": "When using the baseline business rule, Populate Assignment Group based on CI/SO, what behavior would you expect on an Incident form? (Choose two.)",
+    "options": {
+      "A": "If selected CI does not have an Owner group, write the Support group from the Service Offering to the Assignment group field",
+      "B": "If selected CI has a Support group, write that group to the Assignment group field",
+      "C": "If selected CI has an Owner group, write that group to the Assignment group field",
+      "D": "If selected CI does not have a Support group, write the Support group from the Service Offering to the Assignment group field"
+    },
+    "answer": "B, D",
+    "explanation": "Automatically populates the Assignment group with the CI's support group, or falls back to the service offering support group if empty."
+  },
+  {
+    "number": 41,
+    "question": "Which of the following elements are automatically included in the name of the update set for items published via Catalog Builder? Choose 2 answers",
+    "options": {
+      "A": "timestamp",
+      "B": "item author",
+      "C": "variables",
+      "D": "catalog(s)",
+      "E": "item name"
+    },
+    "answer": "D, E"
+  },
+  {
+    "number": 42,
+    "question": "Which platform role can create service portfolios and taxonomy nodes?",
+    "options": {
+      "A": "portfolio_viewer",
+      "B": "portfolio_editor",
+      "C": "portfolio_admin",
+      "D": "portfolio_manager"
+    },
+    "answer": "C",
+    "explanation": "portfolio_admin has permissions to create service portfolios and manage taxonomy nodes."
+  },
+  {
+    "number": 43,
+    "question": "What process is responsible for defining and managing the lifecycle of all catalog items, by producing and maintaining the services in the catalog and ensuring that a central, accurate, and consistent source of data is provided?",
+    "options": {
+      "A": "Service portfolio management",
+      "B": "Catalog item management",
+      "C": "Service mapping",
+      "D": "Service catalog management"
+    },
+    "answer": "D"
+  },
+  {
+    "number": 44,
+    "question": "Which of these can be associated with a service within the service portfolio taxonomy?",
+    "options": {
+      "A": "Node layer",
+      "B": "Node",
+      "C": "Node level",
+      "D": "Leaf node"
+    },
+    "answer": "D",
+    "explanation": "Leaf nodes represent individual services or offerings, which are the most granular level within the taxonomy."
+  },
+  {
+    "number": 45,
+    "question": "What are key relationships between Change and Release Management? Choose 3 answers",
+    "options": {
+      "A": "A Change can contain one or more Releases",
+      "B": "A Release can contain one or more Changes",
+      "C": "Release management application is required, to use the Change management application",
+      "D": "Change management provides governance which includes Release management",
+      "E": "Change includes planning and approvals, Release includes building resting and execution of changes"
+    },
+    "answer": "C, D, E"
+  },
+  {
+    "number": 46,
+    "question": "When defining a Model State Transition Condition for \" Authorized \" to \" Scheduled, \" what is an appropriate selection on the \" Requires \" field?",
+    "options": {
+      "A": "Task is Rejected",
+      "B": "Task is Approved",
+      "C": "Not on Hold",
+      "D": "Task is Authorized"
+    },
+    "answer": "B",
+    "explanation": "Requires is set to Task is Approved to ensure the transition only occurs after positive approval."
+  },
+  {
+    "number": 47,
+    "question": "Which change request fields are mandatory to transition from Review to Closed in the base platform configuration? (Choose 2 options)",
+    "options": {
+      "A": "Closed by",
+      "B": "Close code",
+      "C": "Close notes",
+      "D": "Closed"
+    },
+    "answer": "B, C",
+    "explanation": "Close code and Close notes are required manual inputs to document the outcome before closing."
+  },
+  {
+    "number": 48,
+    "question": "A Portfolio Manager is primarily concerned with the performance of what hierarchy?",
+    "options": {
+      "A": "Portfolio Owner, Service Owner, Catalog Manager",
+      "B": "Requested Item, Catalog Task, Task SLA",
+      "C": "Service Catalog, Catalog Item, Requested Item",
+      "D": "Service Portfolio, Service, Service Offering"
+    },
+    "answer": "D",
+    "explanation": "Portfolio Manager oversees the Service Portfolio > Service > Service Offering hierarchy."
+  },
+  {
+    "number": 49,
+    "question": "A new problem manager wants to know how in create reports for monitoring problem management activities. What do you recommend they do before creating new reports?",
+    "options": {
+      "A": "Submit a request for the sn_report_creator role",
+      "B": "Submit a New Report Request via the service catalog",
+      "C": "Take the Performance Analytics fundamentals course",
+      "D": "Turn on data collection jobs",
+      "E": "Go to Reports > View/Run > All. then search for Problem reports"
+    },
+    "answer": "E"
+  },
+  {
+    "number": 50,
+    "question": "What tools are available to the assignee to help resolve an incident? Choose 2 answers",
+    "options": {
+      "A": "Knowledge Articles",
+      "B": "Known Errors",
+      "C": "Class Manager",
+      "D": "Enterprise CMDB Dashboard",
+      "E": "Incident Overview Dashboard"
+    },
+    "answer": "C, E"
+  },
+  {
+    "number": 51,
+    "question": "A problem record is the Parent to what record?",
+    "options": {
+      "A": "Workaround",
+      "B": "Related Incidents",
+      "C": "Problem Task",
+      "D": "Known Error",
+      "E": "Major Incident"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 52,
+    "question": "When you create a problem from an incident. Impact, urgency and priority are automatically populated, from the incident record. Your problem management process owner wants the problem manager to be responsible for assessing the impact and urgency on the problem, so they don ' t want the values from incident to be copied over. What module would you use to make this adjustment?",
+    "options": {
+      "A": "ITSM > Administration > Properties",
+      "B": "Incident > Administration > Incident Properties",
+      "C": "Problem > Administration > Problem Properties",
+      "D": "System Policy > Rules > Priority Lookup Rules"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 53,
+    "question": "Which is the process responsible for delivering items that have been ordered from a Service Catalog?",
+    "options": {
+      "A": "Catalog Item Design",
+      "B": "Catalog Workflows",
+      "C": "Request Management",
+      "D": "Service Catalog Management",
+      "E": "Catalog Fulfillment"
+    },
+    "answer": "C",
+    "explanation": "Request Management ensures catalog items are delivered following workflows, approvals, and fulfillment steps."
+  },
+  {
+    "number": 54,
+    "question": "Your customer wants to give secure access to business users to view problem records and reports for the products they support. When you install the ITSM roles plugin, what additional problem role is installed to support this requirement?",
+    "options": {
+      "A": "sn_business_user",
+      "B": "sn_problem_read",
+      "C": "sn_service_owner",
+      "D": "sn_problem_write",
+      "E": "sn_problem_business_user"
+    },
+    "answer": "B",
+    "explanation": "sn_problem_read is installed to support secure read-only access for business users."
+  },
+  {
+    "number": 55,
+    "question": "What do you use to identify who will have access to particular items in a service catalog?",
+    "options": {
+      "A": "User criteria",
+      "B": "Availability rules",
+      "C": "Security rules",
+      "D": "User access rules",
+      "E": "Access criteria"
+    },
+    "answer": "A"
+  },
+  {
+    "number": 56,
+    "question": "Your customer has an external system, which is used to perform changes. Your customer wants to capture these changes in your instance for reporting and CMDB maintenance purposes. What baseline Change Model supports this scenario?",
+    "options": {
+      "A": "Automated Changes",
+      "B": "Cloud Infrastructure",
+      "C": "Unauthorized Changes",
+      "D": "Change Registration",
+      "E": "Retroactive Changes"
+    },
+    "answer": "D"
+  },
+  {
+    "number": 57,
+    "question": "Your client indicates they would like a way to designate VIP callers on an incident form. How would you accomplish this?",
+    "options": {
+      "A": "VIP Flag reference decorator",
+      "B": "VIP flag dictionary entry",
+      "C": "VIP Flag field style",
+      "D": "VIP Flag action script"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 58,
+    "question": "Where should an admin go to view all of the search queries entered by users in the knowledge search?",
+    "options": {
+      "A": "[KD_feedback] table",
+      "B": "[kb_view] table",
+      "C": "Knowledge queries application",
+      "D": "Search logs application"
+    },
+    "answer": "C"
+  },
+  {
+    "number": 59,
+    "question": "Where are the timeframe conditions for sending an SLA breach warning notification defined?",
+    "options": {
+      "A": "SLA definition record",
+      "B": "Default SLA flow",
+      "C": "SLA Properties application",
+      "D": "SLA trigger conditions"
+    },
+    "answer": "B"
+  },
+  {
+    "number": 60,
+    "question": "What creates the trigger conditions of a Notification record?",
+    "options": {
+      "A": "Define specific groups and users as recipients",
+      "B": "Use the incident_comments mail script",
+      "C": "Enable the Send to Event Creator",
+      "D": "Modify the conditions on the when to send tab"
+    },
+    "answer": "D"
+  },
+	{
+    "number": 61,
+    "question": "Which catalog properly allows users to save partially-completed requests to complete and submit at a later time?",
+    "options": {
+      "A": "Enable wish list",
+      "B": "Edit cart layout",
+      "C": "User partial save",
+      "D": "Enable cart save"
+    },
+    "answer": "A",
+    "explanation": "Wish list functionality enables users to save partially completed requests or items to submit later."
+  },
+  {
+    "number": 62,
+    "question": "Users with which role can Communicate a workaround or fix? (Choose two.)",
+    "options": {
+      "A": "itil_admin",
+      "B": "problem_coordinator",
+      "C": "problem_task_analyst",
+      "D": "problem_admin"
+    },
+    "answer": "B, D",
+    "explanation": "Problem coordinators and problem admins have the necessary permissions to communicate workarounds and fixes."
+  },
+  {
+    "number": 63,
+    "question": "How is granular read and write access for a specific change model defined?",
+    "options": {
+      "A": "Setting Advanced Security to true and applying user criteria",
+      "B": "Configuring ACL ' s on the Create New landing page",
+      "C": "Change properties",
+      "D": "Configuring ACL ' s on the chge_model table"
+    },
+    "answer": "A",
+    "explanation": "Advanced security on change models allows applying user criteria to control granular access."
+  },
+  {
+    "number": 64,
+    "question": "When a user submits a service request from a catalog what actions are triggered based on the flow definition? Choose 3 answers",
+    "options": {
+      "A": "Approvals",
+      "B": "Notifications",
+      "C": "Tasks",
+      "D": "Action Specs",
+      "E": "Access Controls"
+    },
+    "answer": "A, B, C",
+    "explanation": "Standard service catalog flows trigger approvals, notifications, and fulfillment tasks."
+  },
+  {
+    "number": 65,
+    "question": "Problem management provides what benefits for Incident management? Choose 2 answers",
+    "options": {
+      "A": "Incident managers authorize problem investigations",
+      "B": "Solutions implemented reduce future incidents",
+      "C": "Published workarounds help quickly resolve incidents",
+      "D": "Problem Investigations automatically triggered for multiple user incidents"
+    },
+    "answer": "B, C",
+    "explanation": "Resolving underlying problems reduces future incident volume, and published workarounds help agents resolve incidents faster."
+  },
+  {
+    "number": 66,
+    "question": "What module do you use to change the setting for the time between incident Resolution and Closure?",
+    "options": {
+      "A": "Resolution Properties",
+      "B": "ITSM Properties",
+      "C": "Incident Properties",
+      "D": "System Settings",
+      "E": "incident Settings"
+    },
+    "answer": "C",
+    "explanation": "Incident properties define auto-closure settings and timeframes after resolution."
+  },
+  {
+    "number": 67,
+    "question": "When building multiple catalog items, which components should be evaluated for consolidation and re-use?",
+    "options": {
+      "A": "Sets of Variables",
+      "B": "Worflow Triggers",
+      "C": "Flows and Subflows",
+      "D": "Approvals"
+    },
+    "answer": "A, C",
+    "explanation": "Variable sets and flows/subflows are key reusable components when designing multiple catalog items efficiently."
+  },
+  {
+    "number": 68,
+    "question": "You have just released a new Change Model to the testers. Testers report they can see the old change models but cannot see the new change model on the change landing page. What could cause this?",
+    "options": {
+      "A": "Workflow has not been published",
+      "B": "Testers need itil role to see me change models",
+      "C": "New change models are only visible to Change Managers",
+      "D": "New change model needs Active lo be set to True"
+    },
+    "answer": "C",
+    "explanation": "Newly created change models are restricted by default and visible only to Change Managers until access/visibility rules are adjusted."
+  },
+  {
+    "number": 69,
+    "question": "Which of these can be defined using step based fulfillment in Catalog Builder? Choose 2 answers",
+    "options": {
+      "A": "Approvals",
+      "B": "Subflow triggers",
+      "C": "Notifications",
+      "D": "Tasks",
+      "E": "Payment processing"
+    },
+    "answer": "B, D",
+    "explanation": "Step-based fulfillment in Catalog Builder allows configuring subflow triggers and fulfillment tasks."
+  },
+  {
+    "number": 70,
+    "question": "When using Inbound Email Actions, what happens it an email is received which has no watermark or reference number?",
+    "options": {
+      "A": "New case is created from the message",
+      "B": "New incident created from the message",
+      "C": "New interaction is created from the message",
+      "D": "Email is rejected and auto-reply sent to sender"
+    },
+    "answer": "B",
+    "explanation": "Without a watermark or existing reference number matching an update, inbound email actions create a new incident by default."
+  },
+  {
+    "number": 71,
+    "question": "Prior to Quebec, when you click Change > Create New, which page is displayed?",
+    "options": {
+      "A": "Change Landing Page",
+      "B": "Change Form",
+      "C": "Change Catalog",
+      "D": "Change Wizard",
+      "E": "Change Interceptor"
+    },
+    "answer": "E",
+    "explanation": "The Change Interceptor was used prior to the Change Landing Page to let users choose the type of change request."
+  },
+	{
+    "number": 72,
+    "question": "In request fulfillment, approvals may be required before completing a request. A customer is concerned about requests becoming delayed if the approver is absent for an extended period. What can be suggested to alleviate this concern? (Choose 2 options)",
+    "options": {
+      "A": "The approver can auto-reply with \"approved\" in the subject line.",
+      "B": "The approval can be defined as a group approval.",
+      "C": "The approver can leverage the delegation functionality.",
+      "D": "The approver can forward approval notifications to their manager."
+    },
+    "answer": "B, C",
+    "explanation": "Group approvals and user delegation ensure business continuity and prevent workflow stalls during absences."
+  },
+  {
+    "number": 73,
+    "question": "Inside a change flow, you can automate a task with a sequence of related steps, like looking up a record, creating a record, or applying a policy. What is this component of the flow called?",
+    "options": {
+      "A": "Flow Actions",
+      "B": "Flow Activities",
+      "C": "Flow Steps",
+      "D": "Action Pills",
+      "E": "Flow Tasks"
+    },
+    "answer": "A",
+    "explanation": "Flow actions encapsulate reusable sequences of related steps like record lookups and creations within Flow Designer."
+  },
+  {
+    "number": 74,
+    "question": "Your customer has built a mature knowledge base, with articles targeted to internal audiences, which are technical. Other articles are written for end users, with simple instructions. From the Incident form, the agents would like to be able to identify which articles are visible to the callers. What feature would you use, to satisfy this requirement?",
+    "options": {
+      "A": "Internal/External Highlighting",
+      "B": "Show User Viewable",
+      "C": "User Only View",
+      "D": "Search as User"
+    },
+    "answer": "B",
+    "explanation": "Show User Viewable enables agents to see which articles are visible to the specific caller linked to the incident."
+  },
+  {
+    "number": 75,
+    "question": "As of Quebec, Problem task records will move automatically from one state, to another state, provided the required fields are filled. What are those states?",
+    "options": {
+      "A": "Work in Progress to Closed",
+      "B": "Assess to Work in Progress",
+      "C": "Draft to Assess",
+      "D": "On Hold to Work in Progress",
+      "E": "New to Assess"
+    },
+    "answer": "D",
+    "explanation": "Problem tasks automatically transition from On Hold to Work in Progress when conditions are satisfied."
+  },
+  {
+    "number": 76,
+    "question": "Unless there are particular security requirements, what role is given to users that perform request fulfillment work?",
+    "options": {
+      "A": "catalog_fulfiller",
+      "B": "fulfiller",
+      "C": "itil",
+      "D": "sc_fulfiller",
+      "E": "task_worker"
+    },
+    "answer": "C",
+    "explanation": "The itil role is standard for users who handle standard ITSM fulfillment tasks."
+  },
+  {
+    "number": 77,
+    "question": "When a class is set as a Principal Class, what effect does this have on the Configuration Item (CI) field in change, incident, and problem records?",
+    "options": {
+      "A": "It hides the CI field completely.",
+      "B": "It allows selection of only CIs within the Principal Class.",
+      "C": "It allows the selection of all CIs, regardless of class.",
+      "D": "It locks the CI field to prevent edits."
+    },
+    "answer": "B",
+    "explanation": "Principal class settings automatically filter the CI selection list to show only CIs belonging to principal classes."
+  },
+  {
+    "number": 78,
+    "question": "In a conference room reservation request form, the requester needs to identify the company location from the location table. What variable type is used to achieve this?",
+    "options": {
+      "A": "Single Line Text",
+      "B": "Select Box",
+      "C": "Reference",
+      "D": "Multiple Choice"
+    },
+    "answer": "C",
+    "explanation": "Reference variables link catalog items directly to records in existing database tables like locations."
+  },
+  {
+    "number": 79,
+    "question": "The current status of a problem record is tracked in the State field. Each state has a label, value and constant. For Fix in Progress state, your customer wants to add a prerequisite for moving out of it. When you update the script include which value is better to use in the script?",
+    "options": {
+      "A": "104",
+      "B": "\"Fix in Progress\"",
+      "C": "ProblemState.STATES.FIX_IN_PROGRESS",
+      "D": "104.ProblemState.STATES.FIX_IN_PROGRESS"
+    },
+    "answer": "C",
+    "explanation": "Using constants like ProblemState.STATES.FIX_IN_PROGRESS ensures upgrade safety and code readability."
+  },
+  {
+    "number": 80,
+    "question": "Which type of catalog item may be found in a Service Catalog?",
+    "options": {
+      "A": "Categories",
+      "B": "Record Producers",
+      "C": "Execution Plans",
+      "D": "Requested Items"
+    },
+    "answer": "B",
+    "explanation": "Record Producers are standard items in the Service Catalog used to generate task records like incidents or changes."
+  },
+  {
+    "number": 81,
+    "question": "In the Quebec release of Change management, what new architectural features were added?",
+    "options": {
+      "A": "Catalog builder and Change Designer",
+      "B": "Change Flows, Change Designer and Change Approval Matrix",
+      "C": "Change Models, Change Flows and State Transition Models",
+      "D": "Change PIR Assessments, Change Designer and Change Approval Policies"
+    },
+    "answer": "C",
+    "explanation": "Change Models, Change Flows, and State Transition Models were introduced to modernize change management architecture."
+  },
+  {
+    "number": 82,
+    "question": "What are the components of a Flow Action?",
+    "options": {
+      "A": "Inputs, Processes, Subprocesses, and Outputs",
+      "B": "Processes, Subprocess and Action Steps",
+      "C": "Inputs, Action Steps and Outputs",
+      "D": "Indexes, Processes and Outputs"
+    },
+    "answer": "C",
+    "explanation": "Flow actions consist of Inputs, Action Steps, and Outputs."
+  },
+  {
+    "number": 83,
+    "question": "Which of the following catalog client script methods will modify the choice list options available to an end user on a catalog item?",
+    "options": {
+      "A": "onSubmit",
+      "B": "onLoad",
+      "C": "onSave",
+      "D": "onLaunch"
+    },
+    "answer": "B",
+    "explanation": "onLoad catalog client scripts execute when the form loads and can modify choice lists dynamically."
+  },
+  {
+    "number": 84,
+    "question": "What are the Release types available on the baseline release record?",
+    "options": {
+      "A": "Standard, Normal, Prototype, Patch",
+      "B": "Alpha, Beta, Snapshot, Nightly, Milestone, Release Candidate",
+      "C": "Standard, Normal, Emergency",
+      "D": "Major, Minor Upgrade, Emergency Maintenance, Patch"
+    },
+    "answer": "D",
+    "explanation": "Baseline release types include Major, Minor Upgrade, Emergency Maintenance, and Patch."
+  },
+  {
+    "number": 85,
+    "question": "Which role has the ability to configure and manage incident Management properties?",
+    "options": {
+      "A": "incident_admin",
+      "B": "incident_manager",
+      "C": "itil",
+      "D": "itil_admin"
+    },
+    "answer": "A",
+    "explanation": "incident_admin has the permissions required to configure incident management properties and settings."
+  },
+  {
+    "number": 86,
+    "question": "Which record type would you use for a Computer request?",
+    "options": {
+      "A": "Record Producer",
+      "B": "Order Guide",
+      "C": "Catalog Item",
+      "D": "Content Item"
+    },
+    "answer": "C",
+    "explanation": "A standard Catalog Item is used for ordering goods or services like a computer."
+  },
+  {
+    "number": 87,
+    "question": "What should you use to capture data in a grid layout on a catalog item?",
+    "options": {
+      "A": "Cascade variable",
+      "B": "Multi-row variable set",
+      "C": "Grid variable",
+      "D": "Enable set"
+    },
+    "answer": "B",
+    "explanation": "Multi-row variable sets allow users to capture rows and columns of data in a grid layout."
+  },
+  {
+    "number": 88,
+    "question": "Which property on an order guide will pass variables from one item to another item with equivalent variables?",
+    "options": {
+      "A": "Cascade Variables",
+      "B": "Share Variables",
+      "C": "Waterfall Variables",
+      "D": "Mirror Variables"
+    },
+    "answer": "A",
+    "explanation": "Cascade variables pass information entered in the order guide down to the individual catalog items."
+  },
+  {
+    "number": 89,
+    "question": "What optional Incident table is extended from the Task table?",
+    "options": {
+      "A": "Incident Task [incident_task]",
+      "B": "Child Incident [incident_child]",
+      "C": "Major Incident [major_incident]",
+      "D": "Parent Incident [incident_parent]"
+    },
+    "answer": "A",
+    "explanation": "Incident Task is an optional table extended from Task to manage sub-activities under an incident."
+  },
+  {
+    "number": 90,
+    "question": "Which baseline Change Flow automatically generates a Change task, for Post Implementation Review?",
+    "options": {
+      "A": "Change - Emergency - Review",
+      "B": "Change - Emergency - Authorize",
+      "C": "Change - P1 - Review",
+      "D": "Change - Major Incident - Authorize",
+      "E": "Change - Emergency - PIR-QUESTION"
+    },
+    "answer": "A",
+    "explanation": "Emergency review flows generate standard tasks for evaluating emergency change outcomes."
+  },
+  {
+    "number": 91,
+    "question": "A customer wishes to add a requirement to the Normal Change Model. Prior to transitioning the change status from New to Assess, they would like to ensure that the associated Configuration Item (CI) has a Proposed Change specified on the CI record. What is the recommended approach?",
+    "options": {
+      "A": "Adjust script include \"ChangeRequestStateModelSNC.normal\"",
+      "B": "Add a state transition condition to the state transition record \"New to Assess\"",
+      "C": "Create a flow in Flow Designer for the new phase for the normal change model"
+    },
+    "answer": "B",
+    "explanation": "State transition conditions configure rules and checks required before moving between change states."
+  },
+  {
+    "number": 92,
+    "question": "In the baseline Change - Normal model how can Change Tasks be added? (Choose two.)",
+    "options": {
+      "A": "Manually by the user during all states, except Closed or Canceled",
+      "B": "Manually by the user during New, Assess, and Authorized states",
+      "C": "Automatically depending on the category selected on the Change Request",
+      "D": "Automatically via the Change - Implementation subflow"
+    },
+    "answer": "A, D",
+    "explanation": "Change tasks can be added manually during active states or automatically generated via subflows."
+  },
+  {
+    "number": 93,
+    "question": "What function can a user with only the ITIL role perform in the Major Incident process?",
+    "options": {
+      "A": "Resolve a Major Incident",
+      "B": "Propose a Major Incident candidate",
+      "C": "Publish Major Incident communication updates",
+      "D": "Promote a Major Incident candidate"
+    },
+    "answer": "B",
+    "explanation": "Standard ITIL users can propose an incident as a major incident candidate."
+  },
+  {
+    "number": 94,
+    "question": "What is the Business Rule that triggers automatic group assignment on Incident, Problem or Change requests?",
+    "options": {
+      "A": "USM Assignment Lookup Rule",
+      "B": "Automatic Assignment for ITSM",
+      "C": "Populate Assignment Group based on CI/SO",
+      "D": "Auto-populate ITSM Assignment Groups"
+    },
+    "answer": "C",
+    "explanation": "Populate Assignment Group based on CI/SO automatically sets assignment groups using CI or service offering data."
+  },
+  {
+    "number": 95,
+    "question": "What is the minimum number of offering(s) a service must have to move to the Catalog phase?",
+    "options": {
+      "A": "Four",
+      "B": "Two",
+      "C": "One",
+      "D": "Three"
+    },
+    "answer": "C",
+    "explanation": "A service requires a minimum of one service offering to be published in the service catalog."
+  },
+  {
+    "number": 96,
+    "question": "Your customer complains that when their users click on the Configuration Item magnifier from the Incident form, that they are overwhelmed by the volume of CIs to choose from. They want to exclude certain types of CIs from the CI lists on the Incident, Problem and Change forms. What do you recommend?",
+    "options": {
+      "A": "Add a Show field to the base cmdb table...",
+      "B": "Use the Principal CI class checkbox, to identify the CI classes that they want visible on the Incident, Problem, and Change forms",
+      "C": "Create an Access control to hide unnecessary CIs",
+      "D": "Make a show/hide UI action"
+    },
+    "answer": "B",
+    "explanation": "Principal CI classes automatically filter the selectable CIs on ITSM forms."
+  },
+  {
+    "number": 97,
+    "question": "Which Change request fields are used in conflict detection? Choose 3 answers",
+    "options": {
+      "A": "Planned end date",
+      "B": "Planned start date",
+      "C": "CI Business criticality",
+      "D": "Configuration item",
+      "E": "Risk"
+    },
+    "answer": "A, B, D",
+    "explanation": "Planned start date, planned end date, and configuration item are core fields evaluated during conflict detection."
+  },
+  {
+    "number": 98,
+    "question": "When building out a service catalog categorizing items helps users navigate and search in the catalog. Which roles would allow you to create and maintain categories? Choose 3 answers",
+    "options": {
+      "A": "catalog_manager",
+      "B": "itil_admin",
+      "C": "catalog_builder_editor",
+      "D": "catalog_editor",
+      "E": "catalog_admin"
+    },
+    "answer": "A, D, E",
+    "explanation": "Catalog managers, editors, and admins possess rights to create and maintain categories."
+  },
+  {
+    "number": 99,
+    "question": "Which state will a General Problem record automatically move through if the required fields are completed?",
+    "options": {
+      "A": "New to Assess",
+      "B": "Fix in Progress to Resolved",
+      "C": "Assess to Root Cause Analysis",
+      "D": "Root Cause Analysis to Fix in Progress"
+    },
+    "answer": "A",
+    "explanation": "Problems automatically move from New to Assess when initial requirements are met."
+  },
+  {
+    "number": 100,
+    "question": "Which of the following roles has the ability to create and manage user criteria for service catalogs?",
+    "options": {
+      "A": "catalog_criteria_admin",
+      "B": "catalog_admin",
+      "C": "itil_admin",
+      "D": "catalog_criteria_manager",
+      "E": "catalog_manager"
+    },
+    "answer": "B",
+    "explanation": "catalog_admin manages user criteria and access controls across service catalogs."
+  },
+  {
+    "number": 101,
+    "question": "Which Service Portfolio Management phase does a service belong to when it is in operational state?",
+    "options": {
+      "A": "Active",
+      "B": "Retired",
+      "C": "Catalog",
+      "D": "Pipeline"
+    },
+    "answer": "A",
+    "explanation": "Services currently operational are in the Active phase."
+  },
+  {
+    "number": 102,
+    "question": "In release management what controls the movement of the state from Scoping to Awaiting Approval?",
+    "options": {
+      "A": "Flow",
+      "B": "State model",
+      "C": "Manual state selection",
+      "D": "Workflow"
+    },
+    "answer": "D",
+    "explanation": "Workflows manage the automated state transitions in baseline Release Management."
+  },
+  {
+    "number": 103,
+    "question": "Where can a change manager define the interval frequency for unauthorized change detection?",
+    "options": {
+      "A": "The ci.change.unplanned business rule",
+      "B": "Event Processing Properties module",
+      "C": "Unauthorized Change Properties module",
+      "D": "Unauthorized change flow"
+    },
+    "answer": "C",
+    "explanation": "Unauthorized Change Properties module handles scan intervals and settings."
+  },
+  {
+    "number": 104,
+    "question": "Which of the following can leverage user criteria for controlling access? Choose 2 answers",
+    "options": {
+      "A": "catalog variables",
+      "B": "catalog taxonomy",
+      "C": "catalog topics",
+      "D": "catalog items",
+      "E": "catalog categories"
+    },
+    "answer": "D, E",
+    "explanation": "User criteria are widely used to restrict access to catalog items and categories."
+  },
+  {
+    "number": 105,
+    "question": "What is KCS (Knowledge Centered Services)?",
+    "options": {
+      "A": "A bunch of tables strictly pertaining to CSM case articles...",
+      "B": "A documented methodology to provide a set of best practices for creating and maintaining knowledge",
+      "C": "A dashboard with specific visualization...",
+      "D": "An application that helps agents..."
+    },
+    "answer": "B",
+    "explanation": "KCS is a methodology providing best practices for capturing, structuring, and sharing knowledge."
+  },
+  {
+    "number": 106,
+    "question": "What tools are available to the assignee to help resolve an incident? Choose 2 answers",
+    "options": {
+      "A": "Resolutions from similar incidents",
+      "B": "Known Errors",
+      "C": "CI Class Manager",
+      "D": "Enterprise CMDB Dashboard",
+      "E": "Incident Overview Dashboard"
+    },
+    "answer": "A, B",
+    "explanation": "Resolutions from similar incidents and known errors assist assignees in resolving active incidents."
+  },
+  {
+    "number": 107,
+    "question": "From which table, is the Incident table extended?",
+    "options": {
+      "A": "Work [sn_work]",
+      "B": "Ticket [ticket]",
+      "C": "Task [sn_task]",
+      "D": "Task [task]"
+    },
+    "answer": "D",
+    "explanation": "Incident, Problem, Change, and Request tables are all extended from the base Task [task] table."
+  },
+  {
+    "number": 108,
+    "question": "By default, a business rule causes the Assignment group to be automatically set on a change request record. How is the group identified?",
+    "options": {
+      "A": "Support group on CI record, or if empty the Support group on the Service offering",
+      "B": "Support group on CI record, or if empty, the Support group on the Service",
+      "C": "Change group on CI record, or if empty, the Change group on the Service offering",
+      "D": "Support group on CI record, or the default assignment group for the user"
+    },
+    "answer": "B",
+    "explanation": "Assignment logic looks first at the CI support group and falls back to the service support group."
+  },
+  {
+    "number": 109,
+    "question": "ServiceNow contains a resource with information about all services. It is used to support the sale and delivery of services to employees and customers. What is this resource called?",
+    "options": {
+      "A": "Service Portal",
+      "B": "Service Dashboard",
+      "C": "Service Map",
+      "D": "Service One Stop Shop",
+      "E": "Service Catalog"
+    },
+    "answer": "E",
+    "explanation": "The Service Catalog serves as the repository of available services, deliverables, prices, and performance targets."
+  },
+  {
+    "number": 110,
+    "question": "How are Releases related to Changes?",
+    "options": {
+      "A": "Releases are implemented prior to Changes",
+      "B": "Releases are comprised of one or more Changes",
+      "C": "Changes are implemented prior to Releases",
+      "D": "Changes are comprised of one or more Release"
+    },
+    "answer": "B",
+    "explanation": "A release groups together one or more related changes for deployment."
+  },
+  {
+    "number": 111,
+    "question": "The root cause, workaround, and a fix to a problem have been identified, but management has decided not to implement the solution. Which action does the problem coordinator take regarding the problem record?",
+    "options": {
+      "A": "Communicate Fix",
+      "B": "Accept Risk",
+      "C": "Assess Risk",
+      "D": "Resolve"
+    },
+    "answer": "B",
+    "explanation": "Accept Risk documents the decision not to implement a permanent fix while keeping the workaround recorded."
+  },
+  {
+    "number": 112,
+    "question": "Which role would give you access to the CI Class Manager?",
+    "options": {
+      "A": "ecmdb_admin",
+      "B": "ecmdb",
+      "C": "class_manager",
+      "D": "sn_class_manager"
+    },
+    "answer": "A",
+    "explanation": "ecmdb_admin grants administrative access to the CI Class Manager."
+  },
+  {
+    "number": 113,
+    "question": "How are the relationships between services and offerings that are built in Service Portfolio Management transferred to the Configuration Management Database (CMDB)?",
+    "options": {
+      "A": "Only parent child (service:offering) relationships are automatically created in the CMDB",
+      "B": "All CMDB relationships and dependencies are automatically created upon publishing",
+      "C": "If the service is defined as a business service...",
+      "D": "Any required CMDB relationships and dependencies must be created manually"
+    },
+    "answer": "D",
+    "explanation": "CMDB relationships and dependencies for services and offerings must be established manually or through mapping tools."
+  },
+  {
+    "number": 114,
+    "question": "Your customer is complaining that Service Desk users keep accidentally assigning Incidents to the Network CAB, instead of Network Support. What could you do on the incident form, for the Assignment Group field, to resolve this issue?",
+    "options": {
+      "A": "Add a UI action to hide the Network CAB group",
+      "B": "Add a UI action to provide an error message",
+      "C": "Add Dictionary Override to specify the Incident group Reference Qualifier",
+      "D": "Modify the choice list"
+    },
+    "answer": "C",
+    "explanation": "Dictionary overrides with reference qualifiers restrict selectable assignment groups based on group type."
+  },
+  {
+    "number": 115,
+    "question": "When using the Email Client, what is the difference between an Email Template and a Quick Message?",
+    "options": {
+      "A": "Email Templates are like forms...",
+      "B": "Email Template is defined and automatically applied when the email form launches; Quick Messages are defined and then can be manually applied by the user",
+      "C": "Email Templates are included with ITSM...",
+      "D": "Email templates are defined by users with admin role..."
+    },
+    "answer": "B",
+    "explanation": "Email templates apply automatically upon launch, whereas quick messages are manually selected."
+  },
+  {
+    "number": 116,
+    "question": "How is the Resource Management application activated?",
+    "options": {
+      "A": "Installed with PPM Standard plugin",
+      "B": "Installed as part of Release Management plugin",
+      "C": "Installed as part of adding users",
+      "D": "Installed automatically as part of new system"
+    },
+    "answer": "A",
+    "explanation": "Resource Management is included and activated with the PPM Standard plugin."
+  },
+  {
+    "number": 117,
+    "question": "What are the components of a Flow Action?",
+    "options": {
+      "A": "Processes, Subprocess aid Action Steps",
+      "B": "Indexes, Processes and Outputs",
+      "C": "Inputs Action Steps and Outputs",
+      "D": "Inputs Processes, Subprocesses and Outputs"
+    },
+    "answer": "C",
+    "explanation": "Flow actions are comprised of inputs, action steps, and outputs."
+  },
+  {
+    "number": 118,
+    "question": "The Major Incident Management (MIM) application is linked to the Incident management process, but the records have an additional set of States. What are these MI States?",
+    "options": {
+      "A": "Proposed, Accepted, Rejected, Cancelled",
+      "B": "Proposed, Accepted, Rejected, Reopened",
+      "C": "Proposed, Received, eCAB Convened, Closed",
+      "D": "New, Work in progress, Escalated, Communicated"
+    },
+    "answer": "A",
+    "explanation": "Major incident candidates use Proposed, Accepted, Rejected, and Cancelled states."
+  },
+  {
+    "number": 119,
+    "question": "Given the class structure shown below which types of CIs will be included in a report run against the cmdb_ci_computer table?",
+    "options": {
+      "A": "CIs defined directly in cmdb_ci_computer and all parent classes",
+      "B": "Just CIs defined directly in cmdb_ci_computer",
+      "C": "CIs defined directly in cmdb_ci_computer and all child classes"
+    },
+    "answer": "C",
+    "explanation": "Reports against a table include records from that table and all of its extended child classes."
+  },
+  {
+    "number": 120,
+    "question": "What defines which catalog items, and in what order, are included in an Order Guide?",
+    "options": {
+      "A": "Order guide template",
+      "B": "Rules",
+      "C": "Variable sets",
+      "D": "UI policies"
+    },
+    "answer": "B",
+    "explanation": "Order guide rules determine which catalog items are included and presented based on user input."
+  },
+	{
+    "number": 121,
+    "question": "Your customer wants to use the Normal change model, but wants to add another level of approval for changes relating to the Service, SAP Enterprise Services. What should you do to satisfy this requirement?",
+    "options": {
+      "A": "Add a new Policy Input to the Normal Change Approval Policy",
+      "B": "Add a new Decision to the Normal Change Approval Policy",
+      "C": "Add a new Change Approval Policy",
+      "D": "Add a new Decision to the Normal Change Workflow"
+    },
+    "answer": "B",
+    "explanation": "Adding a new decision within the existing Change Approval Policy allows evaluating conditions such as specific services (like SAP Enterprise Services) to trigger additional approval tiers."
+  },
+  {
+    "number": 122,
+    "question": "What are the different ways a user can provide feedback on a knowledge article? Choose 4 answers",
+    "options": {
+      "A": "Helpful?",
+      "B": "10 Star scale",
+      "C": "Comment on Article",
+      "D": "Pin Article",
+      "E": "5 Star scale",
+      "F": "Flag Article"
+    },
+    "answer": "C, D, E, F",
+    "explanation": "Users can provide feedback through comments, pinning articles (if authorized), 5-star ratings, and flagging articles for review."
+  },
+  {
+    "number": 123,
+    "question": "When you activate the ITSM Roles plugin what additional granular roles are created for the Incident application? Choose 2 answers",
+    "options": {
+      "A": "sn_incident_write",
+      "B": "sn_incident_insert",
+      "C": "sn_incident_update",
+      "D": "sn_incident_read"
+    },
+    "answer": "B, C",
+    "explanation": "The ITSM Roles plugin introduces granular insert and update roles for core tables like incident."
+  },
+  {
+    "number": 124,
+    "question": "Your customer wants incidents to close automatically 7 days after the incident is resolved. How do you meet this requirement? (Choose two.)",
+    "options": {
+      "A": "Modify the Incident Lifecycle flow to trigger from the Resolved date instead of the Updated date",
+      "B": "Update the incident_close UI action script",
+      "C": "From the Incident Properties application, set Enable auto closure of incidents based on Resolution date to Yes",
+      "D": "Modify the Incident Lifecycle flow to expire after 7 days"
+    },
+    "answer": "A, D",
+    "explanation": "Modifying the flow trigger and expiration timing ensures automatic closure relative to the resolution timestamp."
+  },
+  {
+    "number": 125,
+    "question": "Incidents are stored in what table?",
+    "options": {
+      "A": "Incident [task_incident]",
+      "B": "Incident [incident]",
+      "C": "Incident [sn_incident]",
+      "D": "Incident [sn_task_incident]"
+    },
+    "answer": "B",
+    "explanation": "The base table for incidents in ServiceNow is incident."
+  },
+  {
+    "number": 126,
+    "question": "Your implementation team has a new Business Analyst. They will be attending their first Service Catalog workshop and will be responsible for capturing notes and decisions from the workshop. What Now Create assets do you recommend they review, to prepare? (Choose two.)",
+    "options": {
+      "A": "Service Catalog and Request Mgmt - Workshop Preparation Guide",
+      "B": "Service Catalog and Request Mgmt - Process Guide",
+      "C": "IT Service Management - Typical Challenges and Remediation",
+      "D": "ITSM - Business Outcomes and Corresponding KPIs"
+    },
+    "answer": "A, B",
+    "explanation": "The Workshop Preparation Guide and Process Guide provide essential frameworks and terminology for catalog workshops."
+  },
+  {
+    "number": 127,
+    "question": "Incidents can be created and managed in the workspace using UI layouts that are tailored to different personas, processes, and interfaces. Examples include: Default, Major incidents, Self Service, Mobile. What are these UI layouts called in the Now Platform?",
+    "options": {
+      "A": "Forms",
+      "B": "Form Designs",
+      "C": "Form Layouts",
+      "D": "Views",
+      "E": "Workspaces"
+    },
+    "answer": "D",
+    "explanation": "Views control which fields and layout appear on a form based on context or persona."
+  },
+  {
+    "number": 128,
+    "question": "Category and Subcategory values can be set manually on the Incident form. What are disadvantages of this approach? (Choose two.)",
+    "options": {
+      "A": "Too many options may confuse users and increase mis-categorization",
+      "B": "Choices have no additional metadata to drive process",
+      "C": "It is difficult to implement",
+      "D": "It is not part of the baseline instance"
+    },
+    "answer": "A, B",
+    "explanation": "Manual categorical choices often lead to user confusion and lack the structured metadata needed for automated routing or reporting."
+  },
+  {
+    "number": 129,
+    "question": "What types of Conflicts are detected automatically on the Change request? Choose 3 answers",
+    "options": {
+      "A": "Conflict with Company Holiday Schedule",
+      "B": "Conflict with Blackout Schedule",
+      "C": "Conflict with Assignee Shift Schedule",
+      "D": "Conflict with Maintenance Window",
+      "E": "Another change for the same CI, at the same time"
+    },
+    "answer": "B, D, E",
+    "explanation": "Change conflict engine automatically detects overlaps with blackout schedules, maintenance windows, and concurrent changes on the same CI."
+  },
+  {
+    "number": 130,
+    "question": "What is a core difference between an Incident and a Problem?",
+    "options": {
+      "A": "Incidents can be any priority; Problems are high or critical",
+      "B": "Incidents are focused on the quickest resolution; Problems are focused on root cause analysis",
+      "C": "Incidents are the same as a Problem",
+      "D": "Incidents are focused on one individual having an issue; Problems are when you have many people having the same issue"
+    },
+    "answer": "B",
+    "explanation": "Incidents aim to restore service quickly (workaround/fix), whereas problems investigate underlying root causes."
+  },
+  {
+    "number": 131,
+    "question": "What role do you need to delete an incident record?",
+    "options": {
+      "A": "incident_manager",
+      "B": "itil_admin",
+      "C": "service_owner",
+      "D": "itil"
+    },
+    "answer": "B",
+    "explanation": "The itil_admin role grants elevated permissions, including deleting incident records, while maintaining security best practices."
+  },
+  {
+    "number": 132,
+    "question": "When modifying a Change Flow, a library is available of re-usable components for your flow. What are these components called?",
+    "options": {
+      "A": "Attributes",
+      "B": "Flow actions",
+      "C": "Flow activities",
+      "D": "Properties"
+    },
+    "answer": "C",
+    "explanation": "Flow activities provide pre-built, reusable steps within change workflows and flow designer."
+  },
+  {
+    "number": 133,
+    "question": "Which service types can be managed through the scope of Service Portfolio Management? Choose 2 answers",
+    "options": {
+      "A": "Business service",
+      "B": "Application service",
+      "C": "Mobile service",
+      "D": "Technical service"
+    },
+    "answer": "A, B",
+    "explanation": "Service Portfolio Management primarily tracks and governs Business Services and Application Services."
+  },
+  {
+    "number": 134,
+    "question": "Incident management includes limited functionality for what advanced reporting capability?",
+    "options": {
+      "A": "Machine Learning Metrics",
+      "B": "Performance Analytics",
+      "C": "KPI Reports",
+      "D": "Analytics Dashboards"
+    },
+    "answer": "B",
+    "explanation": "Performance Analytics is integrated with limited baseline indicator content for tracking incident trends over time."
+  },
+  {
+    "number": 135,
+    "question": "What baseline Change Flows support the baseline Normal Change model?",
+    "options": {
+      "A": "Change - Normal - Assess, Change - Normal - Authorize, Change - Normal - Close, Change - Implementation tasks",
+      "B": "Change - Normal - New, Change - Normal - Assess, Change - Implement, Change - Implementation tasks",
+      "C": "Change - Normal - Assess, Change - Normal - Authorize, Change - Normal - Implement Change, Change - Implementation tasks",
+      "D": "Change - Normal - New, Change - Normal - Review, Change - Normal - Close, Change - Implementation tasks"
+    },
+    "answer": "C",
+    "explanation": "Baseline normal change models utilize Assess, Authorize, and Implement subflows."
+  },
+  {
+    "number": 136,
+    "question": "After publishing an item via Catalog Builder, the associated update set is set to which state?",
+    "options": {
+      "A": "New",
+      "B": "Complete",
+      "C": "In progress",
+      "D": "Published"
+    },
+    "answer": "B",
+    "explanation": "Catalog Builder automatically marks the generated update set as Complete upon successful publication."
+  },
+  {
+    "number": 137,
+    "question": "In the baseline Change - Normal model how can Change Tasks be added? (Choose two.)",
+    "options": {
+      "A": "Automatically via the Change - Implementation subflow",
+      "B": "Manually by the user during New, Assess, and Authorized states",
+      "C": "Automatically depending on the category selected on the Change Request",
+      "D": "Manually by the user during all states, except Closed or Canceled"
+    },
+    "answer": "A, D",
+    "explanation": "Change tasks can be added via implementation subflows or manually during active open states."
+  },
+  {
+    "number": 138,
+    "question": "Which record type would you use for an Ask a Question form that would generate an Incident?",
+    "options": {
+      "A": "Order Guide",
+      "B": "Content Item",
+      "C": "Record Producer",
+      "D": "Linked Item",
+      "E": "Catalog Item"
+    },
+    "answer": "C",
+    "explanation": "Record Producers allow users to fill out user-friendly catalog forms that generate task records like incidents."
+  },
+  {
+    "number": 139,
+    "question": "Which field from the configuration item will automatically populate in the Assignment group field of a problem record?",
+    "options": {
+      "A": "Change group",
+      "B": "Support group",
+      "C": "Managed",
+      "D": "Approval group"
+    },
+    "answer": "B",
+    "explanation": "The Support group field on the CI record populates the assignment group on related ITSM task records."
+  },
+  {
+    "number": 140,
+    "question": "Your customer is a data center with a construction department. They want the catalog to contain two items: 1. Construction request 2. Getting Started with Construction Requests (containing a link to a Knowledge Article). What type of item would you use to satisfy the requirement for the Getting Started Item?",
+    "options": {
+      "A": "Knowledge Item",
+      "B": "Record Producer",
+      "C": "Content Item",
+      "D": "Order Guide",
+      "E": "Catalog Item"
+    },
+    "answer": "E",
+    "explanation": "Catalog items or content items are used in catalogs, but standard catalog items/content items link documentation or resources effectively."
+  },
+  {
+    "number": 141,
+    "question": "Your customer wants to use Incident Tasks on Incident Records. But for efficiency reasons they want to automatically close all Incident Tasks when the parent Incident is closed or canceled. How could you meet this requirement? Choose 2 answers",
+    "options": {
+      "A": "On Incident Properties, for Close Open Incident Tasks when Incident is closed or canceled, select Yes",
+      "B": "Enable system property com.snc.incident.incident_task_closure",
+      "C": "Edit system property com.snc.incident.autoclose_based_on_resolved_at",
+      "D": "On Incident Properties, for Autoclose Incident Tasks, select Yes"
+    },
+    "answer": "C, D",
+    "explanation": "Incident properties manage cascading closure rules and auto-closure settings for child incident tasks."
+  },
+  {
+    "number": 142,
+    "question": "Which should be used to explore the entire hierarchy and table definitions of the Configuration Management Database Classes?",
+    "options": {
+      "A": "Application Menus",
+      "B": "Reports",
+      "C": "CI Class Manager",
+      "D": "Dependency View"
+    },
+    "answer": "C",
+    "explanation": "CI Class Manager provides a centralized interface for viewing and modifying CMDB class hierarchies and attributes."
+  },
+  {
+    "number": 143,
+    "question": "What would you use to create Incident records based on email sent by users or systems?",
+    "options": {
+      "A": "Transform Map",
+      "B": "Record Producer",
+      "C": "Inbound Flow Action",
+      "D": "Data Collection Job"
+    },
+    "answer": "C",
+    "explanation": "Inbound Flow Actions process incoming emails and automate the creation of incident records."
+  },
+  {
+    "number": 144,
+    "question": "In Change management, what allows customers to define condition based flows for a fit for purpose model?",
+    "options": {
+      "A": "Workflows 2.0",
+      "B": "State Transition Models",
+      "C": "Conditional Change Models",
+      "D": "State Flows"
+    },
+    "answer": "B",
+    "explanation": "State Transition Models define rules, conditions, and allowed paths between change states."
+  },
+  {
+    "number": 145,
+    "question": "A tester reports a bug, because they submitted a Known Error article from a Problem record, but it is not visible from the Known Error database. What could cause this?",
+    "options": {
+      "A": "The Problem Management Best Practice - Madrid - Knowledge Integration plugin has not been activated",
+      "B": "The article is in draft state but has not been published",
+      "C": "The tester is not impersonating an itil user",
+      "D": "The user criteria on the knowledge base is incorrect"
+    },
+    "answer": "B",
+    "explanation": "Created articles start in Draft state and must be published before appearing in searchable knowledge bases."
+  },
+  {
+    "number": 146,
+    "question": "What functionality can be used to define the sequence of activities that should be taken to complete catalog items? Choose 2 answers",
+    "options": {
+      "A": "Workflow",
+      "B": "Activity Map",
+      "C": "Flow",
+      "D": "State Transitions"
+    },
+    "answer": "A, C",
+    "explanation": "Both Workflows and Flows in Flow Designer orchestrate catalog item fulfillment steps."
+  },
+  {
+    "number": 147,
+    "question": "Which Catalog record field specifies who can administer its categories?",
+    "options": {
+      "A": "Manager",
+      "B": "Admin",
+      "C": "Category Owner",
+      "D": "Editor"
+    },
+    "answer": "A",
+    "explanation": "The Manager field on catalog categories designates administrative ownership."
+  },
+  {
+    "number": 148,
+    "question": "A manager asks how to determine which Incidents were routed to multiple groups before being resolved. What field could this manager add to their list view or report filter criteria to identify these records?",
+    "options": {
+      "A": "On call escalation count",
+      "B": "Activity stream",
+      "C": "Reopen count",
+      "D": "Assignment group count",
+      "E": "Reassignment count"
+    },
+    "answer": "E",
+    "explanation": "Reassignment count tracks how many times an incident's assignment group has changed, highlighting routing inefficiency."
+  },
+  {
+    "number": 149,
+    "question": "When using Catalog Builder, what can be built using templates? Choose 2 answers",
+    "options": {
+      "A": "Content items",
+      "B": "Catalog items",
+      "C": "Knowledge articles",
+      "D": "Order guides",
+      "E": "Record producers"
+    },
+    "answer": "B, D",
+    "explanation": "Catalog Builder templates streamline the creation of catalog items and order guides."
+  },
+  {
+    "number": 150,
+    "question": "Your company sells bicycles. They want to build a service catalog for current and prospective customers, so they can browse for bicycles and accessories, and make purchases. What interface is suitable for these external users?",
+    "options": {
+      "A": "Now Catalog App",
+      "B": "Customer Service Catalog",
+      "C": "Service Catalog Mobile App",
+      "D": "Google leads spoke",
+      "E": "Portal"
+    },
+    "answer": "E",
+    "explanation": "The Service Portal provides a user-friendly web interface for external customers and employees to browse the catalog."
+  },
+  {
+    "number": 151,
+    "question": "What defines the required approvals and the associated conditions for a change model?",
+    "options": {
+      "A": "A change approval policy",
+      "B": "A change model's state transitions",
+      "C": "A change model approval definition",
+      "D": "A change approval lifecycle flow"
+    },
+    "answer": "A",
+    "explanation": "Change approval policies establish structured decision criteria and approval requirements."
+  },
+  {
+    "number": 152,
+    "question": "A customer requires that any Cloud Infrastructure change involving a Critical CI to go through a Review state. They have duplicated the baseline Cloud infrastructure base model. What additional configurations are necessary to fulfill this requirement?",
+    "options": {
+      "A": "Modify the default Cloud Infrastructure flow",
+      "B": "Add Review State for critical CIs",
+      "C": "Add the Critical CI field to the CI record form",
+      "D": "Add the Review state to the model record",
+      "E": "Add the Critical CI field to the Change Request form"
+    },
+    "answer": "D, E",
+    "explanation": "Customizing change models requires adding the necessary lifecycle states and ensuring relevant fields are available on the change request form."
+  },
+  {
+    "number": 153,
+    "question": "Your customer wants to know why users with the problem_coordinator role can communicate workarounds and fixes, but users with problem_task_analyst cannot. How do you explain this?",
+    "options": {
+      "A": "The technical resources working on the problem investigation are focused on the technical details, and may provide information that is not useful for the callers",
+      "B": "The problem coordinator is responsible for approving or rejecting the proposed message",
+      "C": "The message will be automatically displayed on the Portal",
+      "D": "The problem coordinator is the only role with the ability to recall a message"
+    },
+    "answer": "A",
+    "explanation": "Coordinators oversee communications to ensure clarity and relevance for end-users, separating technical investigation from external communication."
+  },
+  {
+    "number": 154,
+    "question": "Your customer would like to add a field to the Something is Broken record producer form. Which formatter would you use to add the field?",
+    "options": {
+      "A": "Form Designer",
+      "B": "VEditor",
+      "C": "Variable Designer",
+      "D": "Record Producer Form Designer",
+      "E": "Default Variables Editor"
+    },
+    "answer": "D, E",
+    "explanation": "Record producer forms utilize variable editors and designers to manage question inputs."
+  },
+  {
+    "number": 155,
+    "question": "Incidents can be created and managed in the workspace, using UI layouts that are tailored to different personas, processes, and interfaces. Examples include: Default, Major incidents, Self Service, Mobile. What are these UI layouts called in the Now Platform?",
+    "options": {
+      "A": "Form Layouts",
+      "B": "Workspaces",
+      "C": "Forms",
+      "D": "Form Designs",
+      "E": "Views"
+    },
+    "answer": "E",
+    "explanation": "Views determine form layout variations for different operational contexts."
+  },
+  {
+    "number": 156,
+    "question": "Where can a change manager define the conditions that must be met before a change request can move from one state to another?",
+    "options": {
+      "A": "State choices",
+      "B": "State conditions",
+      "C": "Model State Transition Conditions",
+      "D": "Dictionary Overrides"
+    },
+    "answer": "C",
+    "explanation": "Model State Transition Conditions enforce mandatory checks before state changes occur."
+  },
+  {
+    "number": 157,
+    "question": "What is an example of a Key Performance Indicator for Change management that is included with Performance Analytics, but not available in ServiceNow reporting? (Choose two.)",
+    "options": {
+      "A": "% Successful Changes",
+      "B": "Count of Completed Changes per Month, by Change Type",
+      "C": "% Unauthorized Changes",
+      "D": "Count of Completed Changes per Month, by Category"
+    },
+    "answer": "A, C",
+    "explanation": "Percentage metrics tracking success and unauthorized changes over time leverage Performance Analytics historical score collection."
+  },
+  {
+    "number": 158,
+    "question": "What is an example of a good use case for an Order Guide?",
+    "options": {
+      "A": "Order a set of Dishes",
+      "B": "Order a Custom Automobile",
+      "C": "Order a Technical Consultation",
+      "D": "Order a Couch",
+      "E": "Order a case of Laundry Soap"
+    },
+    "answer": "A",
+    "explanation": "Order guides bundle multiple related catalog items together based on user choices, such as ordering dishes and matching cutlery."
+  },
+  {
+    "number": 159,
+    "question": "What are key relationships between Change and Problem records? Choose 2 answers",
+    "options": {
+      "A": "A Problem must be associated with a Change, before it can be closed",
+      "B": "Changes which cause incidents should have an associated Problem",
+      "C": "A Change can cause a Problem",
+      "D": "Problem can be solved by a Change"
+    },
+    "answer": "C, D",
+    "explanation": "Problems are resolved by implementing changes, and poorly executed changes can introduce new problems."
+  },
+  {
+    "number": 160,
+    "question": "What is the trigger for the Change - Normal - Assess Flow?",
+    "options": {
+      "A": "A Change request using the Normal Change model is moved to the Assess state",
+      "B": "A Change request using the Normal Change model is Assigned to a group",
+      "C": "A Change request using the Normal Change model is created",
+      "D": "A Change request using the Normal Change model is Low Risk and is moved to the Assess state"
+    },
+    "answer": "A",
+    "explanation": "Transitioning a normal change to the Assess state triggers the corresponding assess flow."
+  },
+  {
+    "number": 161,
+    "question": "On an incident record, where are the fields that appear on the caller lookup select box defined?",
+    "options": {
+      "A": "The ref_ac_column attribute from the dictionary entry",
+      "B": "The Caller lookup field on the [user] table",
+      "C": "The ref_contributions attribute on the caller lookup form",
+      "D": "The form design of the caller lookup form"
+    },
+    "answer": "A",
+    "explanation": "Reference autocomplete attributes like ref_ac_columns determine which additional fields display during lookups."
+  },
+  {
+    "number": 162,
+    "question": "Which record type would you use for a View Company Policies link that would redirect to a Knowledge Article?",
+    "options": {
+      "A": "Content Item",
+      "B": "Record Producer",
+      "C": "Knowledge Item",
+      "D": "Order Guide",
+      "E": "Catalog Item"
+    },
+    "answer": "A",
+    "explanation": "Content items allow embedding links, external sites, or knowledge articles directly inside the service catalog."
+  },
+  {
+    "number": 163,
+    "question": "What happens when an existing service record is checked out in Service Builder for editing?",
+    "options": {
+      "A": "The original service record is placed in a Retired state",
+      "B": "The service portfolio record is placed in a Work in progress state",
+      "C": "The service and offerings are temporarily unavailable for consumption",
+      "D": "A copy of the service is created and placed in a Draft state"
+    },
+    "answer": "B",
+    "explanation": "Checking out a record creates a working draft while maintaining the active production version until published."
+  },
+  {
+    "number": 164,
+    "question": "How does a customer setup additional notifications when the SLA Percentage Timer reaches 85%?",
+    "options": {
+      "A": "Use a newly created business rule to create an event",
+      "B": "Use Flow Designer to add new action to the SLA notification and escalation flow",
+      "C": "Use the SLA Timer Configuration to add new notification",
+      "D": "Use the SLA Definitions to add a new SLA workflow"
+    },
+    "answer": "B",
+    "explanation": "Flow Designer handles modern SLA notification and escalation workflows."
+  },
+  {
+    "number": 165,
+    "question": "Which of the following options can a survey administrator define on an individual survey? (Choose two.)",
+    "options": {
+      "A": "The ability for end users to decline survey assignments",
+      "B": "Number of survey reminder notifications",
+      "C": "Trigger conditions",
+      "D": "Anonymize responses"
+    },
+    "answer": "B, D",
+    "explanation": "Survey definitions support configuration of reminder schedules and response anonymization."
+  },
+  {
+    "number": 166,
+    "question": "What would you use to define a common grouping of configuration items such as all web servers in Miami?",
+    "options": {
+      "A": "CI class",
+      "B": "Dependent group",
+      "C": "CSDM component group",
+      "D": "Dynamic CI group"
+    },
+    "answer": "D",
+    "explanation": "Dynamic CI groups use query criteria to automatically group CIs dynamically."
+  },
+  {
+    "number": 167,
+    "question": "A tester has submitted a bug report because at no point in the Problem lifecycle does the Create Known Error article link appear under Related Links. Also, they notice there is no Known Error knowledge base in the instance. What might be the cause of this?",
+    "options": {
+      "A": "The Problem Management Best Practice - Madrid - Knowledge integration plugin has not been activated",
+      "B": "Tester is not impersonating Problem Coordinator",
+      "C": "The customer did not pay the bill for Knowledge management",
+      "D": "The sn_known_error_write role is required to see the Create Known Error article link",
+      "E": "The requirement was not in the stories"
+    },
+    "answer": "A",
+    "explanation": "Activating problem best practice integration plugins sets up the dedicated known error knowledge bases and links."
+  },
+  {
+    "number": 168,
+    "question": "Your customer wants to change the way Priority on Problem records is calculated based on Impact and Urgency. Which module should you use to locate and update the Priority Problem Lookup record?",
+    "options": {
+      "A": "Priority Matrix",
+      "B": "Choice Lists",
+      "C": "Data Lookup Definitions",
+      "D": "Priority Rule Definitions"
+    },
+    "answer": "C",
+    "explanation": "Data Lookup Definitions govern priority matrix calculations across ITSM applications."
+  },
+  {
+    "number": 169,
+    "question": "A user wants to know what makes the Known Error knowledge base in ServiceNow different from all other knowledge bases. How should you respond?",
+    "options": {
+      "A": "Only users with sn_known_error_write can create Known Error articles",
+      "B": "The Known Error knowledge base documents problems that are under investigation, but not yet have a root cause",
+      "C": "Users with sn_problem_write can create known error articles, but not articles for other knowledge bases",
+      "D": "The Known Error knowledge articles use a template, which includes the Workaround and the Cause"
+    },
+    "answer": "D",
+    "explanation": "Known error articles utilize a standardized template capturing workaround details and root causes."
+  },
+  {
+    "number": 170,
+    "question": "Which should be used to explore the entire hierarchy and table definitions of the Configuration Management Database Classes?",
+    "options": {
+      "A": "Application Menus",
+      "B": "Report",
+      "C": "Dependency view",
+      "D": "CI Class Manager"
+    },
+    "answer": "D",
+    "explanation": "CI Class Manager provides full visibility into CMDB class structures and definitions."
+  },
+  {
+    "number": 171,
+    "question": "Which type of catalog item may be found in a Service Catalog?",
+    "options": {
+      "A": "Categories",
+      "B": "Content Items",
+      "C": "Requested Items",
+      "D": "Execution Plans"
+    },
+    "answer": "B",
+    "explanation": "Content items are a standard item type found in service catalogs alongside standard catalog items and record producers."
+  },
+  {
+    "number": 172,
+    "question": "Your customer wants to use the Service Catalog to generate task-based records for end-user inquiries. What Service Catalog capability can you use to generate these records?",
+    "options": {
+      "A": "Catalog Items",
+      "B": "Record Producers",
+      "C": "Content Items",
+      "D": "Execution Plans"
+    },
+    "answer": "B",
+    "explanation": "Record Producers map form submissions directly to target task tables."
+  },
+  {
+    "number": 173,
+    "question": "Your customer is using the baseline Create Incident Catalog Item and would like to add a few additional input fields. How should you update the catalog item?",
+    "options": {
+      "A": "Edit in Catalog Builder",
+      "B": "Edit in Item Designer",
+      "C": "Edit in Catalog Item Designer",
+      "D": "Edit in Form Designer"
+    },
+    "answer": "A",
+    "explanation": "Catalog Builder is the modern interface for modifying and creating catalog items."
+  },
+  {
+    "number": 174,
+    "question": "When defining SLAs for the service catalog at what level is the SLA typically defined?",
+    "options": {
+      "A": "Catalog Task",
+      "B": "Requested Item",
+      "C": "Request",
+      "D": "Service Catalog"
+    },
+    "answer": "B",
+    "explanation": "SLAs for service catalog requests are commonly attached at the Requested Item [sc_req_item] level."
+  },
+  {
+    "number": 175,
+    "question": "The ability to authorize requests is enabled using a role which requires a user license. What is this role?",
+    "options": {
+      "A": "sn_approval_write",
+      "B": "sc_approver",
+      "C": "approver",
+      "D": "approver_user"
+    },
+    "answer": "D",
+    "explanation": "The approver_user role permits users to approve requests and consumes a license."
+  },
+  {
+    "number": 176,
+    "question": "What are key relationships between Change and Release Management? Choose three.",
+    "options": {
+      "A": "Release management application is required to use the Change management application",
+      "B": "Change includes planning and approvals; Release includes building, testing and execution of changes",
+      "C": "A Release can contain one or more Changes",
+      "D": "A Change can contain one or more Releases",
+      "E": "Change management provides governance, which includes Release management"
+    },
+    "answer": "B, C, E",
+    "explanation": "Releases group changes together for deployment, while change management provides governance and planning."
+  },
+  {
+    "number": 177,
+    "question": "Which of the following cannot be defined or set through a Catalog UI Policy?",
+    "options": {
+      "A": "Apply a requirement to all form views",
+      "B": "Setting a variable to mandatory",
+      "C": "Reverse UI Policy if conditions are false",
+      "D": "Setting a variable to read-only"
+    },
+    "answer": "A",
+    "explanation": "Catalog UI policies are scoped specifically to catalog item views and variables."
+  },
+  {
+    "number": 178,
+    "question": "When customers ask to move existing service requests (catalog items) from other platforms, what is a good practice to follow?",
+    "options": {
+      "A": "Maintain the same catalog structure as they implemented previously",
+      "B": "Move each one over, ensuring that each new item has its own unique workflow",
+      "C": "Notify all existing users and solicit input on the new catalog items",
+      "D": "Review existing items to identify commonalities, to see if items may be combined",
+      "E": "Whenever possible combine existing items into order guides"
+    },
+    "answer": "D",
+    "explanation": "Reviewing existing items to combine commonalities prevents catalog sprawl and leverages reusable variable sets."
+  },
+  {
+    "number": 179,
+    "question": "Your implementation has some legacy change types with workflows, and also some new change models. What option for Change Create New will support your scenario?",
+    "options": {
+      "A": "Change Landing Page",
+      "B": "Change Overview",
+      "C": "Change Interceptor",
+      "D": "Change Catalog"
+    },
+    "answer": "D",
+    "explanation": "Change Catalog supports presenting both legacy and multimodal change options cleanly."
+  },
+  {
+    "number": 180,
+    "question": "A customer requires incidents to automatically move to a Closed state from Resolved after 7 days. How is this configured? Choose 2 answers",
+    "options": {
+      "A": "Configure the incident Lifecycle flow script action",
+      "B": "Configure the number of days Resolved incidents automatically close property",
+      "C": "Configure the incident lifecycle timeline property",
+      "D": "Enable the auto closure of Incidents based on Resolution date property"
+    },
+    "answer": "C, D",
+    "explanation": "Incident lifecycle properties enable and configure automated closure timing after resolution."
+  },
+  {
+    "number": 181,
+    "question": "A new problem manager wants a high level view of the activities in problem management. What module do you recommend?",
+    "options": {
+      "A": "Problem > Dashboard",
+      "B": "Problem > Overview",
+      "C": "Problem > Process Health Dashboard",
+      "D": "Problem > Homepage",
+      "E": "ITIL Manager > Homepage"
+    },
+    "answer": "B",
+    "explanation": "The Problem Overview dashboard provides a high-level summary of active problem metrics and activities."
+  },
+  {
+    "number": 182,
+    "question": "On a request form, the requester needs to indicate when they need to receive the item. What Variable type would you use for this information?",
+    "options": {
+      "A": "Duration",
+      "B": "Due Date",
+      "C": "Date Picker",
+      "D": "Date"
+    },
+    "answer": "C",
+    "explanation": "Date Picker variables allow users to select specific calendar dates."
+  },
+  {
+    "number": 183,
+    "question": "A customer wants to add a new Catalog Item to the Service Catalog. What process would be used to ensure the new item is authorized?",
+    "options": {
+      "A": "Fulfillment Management",
+      "B": "Release Management",
+      "C": "Configuration Management",
+      "D": "Change Management",
+      "E": "Catalog Management"
+    },
+    "answer": "D",
+    "explanation": "Introducing new catalog items and workflows into production is governed through Change Management."
+  },
+  {
+    "number": 184,
+    "question": "The key stakeholder for your ITSM implementation wants to have SLAs on every Task record. What advice do you give regarding SLAs on Problem records?",
+    "options": {
+      "A": "SLAs are recommended in the ITIL framework for problem management",
+      "B": "SLAs are counterproductive to problem management, as the key objective is to permanently fix an error no matter how long that may take",
+      "C": "SLS are available for problem management, but require custom code",
+      "D": "SLAs are essential to problem management, as support specialists need to quickly identify root causes"
+    },
+    "answer": "B",
+    "explanation": "Problem management focuses on thorough root-cause analysis and permanent fixes, making rigid time-based SLAs counterproductive."
+  },
+  {
+    "number": 185,
+    "question": "Your customer wants to add a notification to the Change - Emergency - Authorize Flow. What is the first thing you would do to meet this requirement?",
+    "options": {
+      "A": "Create a backup of the baseline Change - Emergency - Authorize Flow, and edit the baseline flow",
+      "B": "Unpublish the baseline Change - Emergency - Authorize flow",
+      "C": "Deactivate the baseline Change - Emergency - Authorize flow",
+      "D": "Create a copy of the baseline Change - Emergency - Authorize Flow, and then edit the new copy"
+    },
+    "answer": "D",
+    "explanation": "Out-of-the-box flows should always be copied before customization to preserve upgrade integrity."
+  },
+  {
+    "number": 186,
+    "question": "Why don't Problem records automatically move from Resolved to Closed after the fix is implemented?",
+    "options": {
+      "A": "It is designed to follow the ITIL4 standard",
+      "B": "There is a scheduled job that automatically moves Resolved problems to Closed after 7 days",
+      "C": "It is good practice to monitor fixes implemented, to ensure the underlying issues are resolved, before closing a problem record",
+      "D": "There is no Closed state. Problem records are moved to Completed"
+    },
+    "answer": "C",
+    "explanation": "Problems require verification time to ensure implemented fixes successfully prevent recurrence before closure."
+  },
+  {
+    "number": 187,
+    "question": "What determines the class and table structure that infrastructure configuration items map to in the CSDM model?",
+    "options": {
+      "A": "The version number and type of CSDM implementation.",
+      "B": "The data sources, discovery tools, and system integrations.",
+      "C": "The selected CMDB domain and base system configuration.",
+      "D": "The user permissions and assigned administrative roles."
+    },
+    "answer": "B",
+    "explanation": "Discovery tools and integration sources populate and map CIs to their appropriate CMDB classes."
+  },
+  {
+    "number": 188,
+    "question": "What function can a user with only the ITIL role perform in the Major Incident process?",
+    "options": {
+      "A": "Publish Major Incident communication updates",
+      "B": "Resolve a Major Incident",
+      "C": "Propose a Major Incident candidate",
+      "D": "Promote a Major Incident candidate"
+    },
+    "answer": "C",
+    "explanation": "ITIL users can propose incidents as major incident candidates for evaluation."
+  },
+  {
+    "number": 189,
+    "question": "What is normally done when a Root Cause and a Workaround are identified for a problem to document the quickest known resolution?",
+    "options": {
+      "A": "Publish Workaround",
+      "B": "Document a Known error",
+      "C": "Complete Investigation",
+      "D": "Complete RCA",
+      "E": "Document Five Whys"
+    },
+    "answer": "A",
+    "explanation": "Publishing the workaround makes it quickly accessible to service desk agents resolving similar incidents."
+  },
+  {
+    "number": 190,
+    "question": "When configuring stages in Flow Designer, what are some of the options that can be done? (Choose two.)",
+    "options": {
+      "A": "Stage labels and names can be changed",
+      "B": "States for the requested item records can be renamed",
+      "C": "Define a Service Level Agreement for a stage",
+      "D": "Estimated durations can be set"
+    },
+    "answer": "A, D",
+    "explanation": "Stage labels and estimated durations can be customized within flow stage configurations."
+  },
+  {
+    "number": 191,
+    "question": "You have just upgraded your instance and have not migrated to multimodal change. Using the default settings, when you click on Change > Create new, what page displays?",
+    "options": {
+      "A": "Change Interceptor",
+      "B": "Change Form",
+      "C": "Change Landing Page",
+      "D": "Change Overview"
+    },
+    "answer": "A",
+    "explanation": "Change Interceptor prompts users to select the change type when multimodal change is not enabled."
+  },
+	{
+    "number": 192,
+    "question": "When using Inbound Email Actions, what happens if an email is received which has no watermark or reference number?",
+    "options": {
+      "A": "New interaction is created from the message",
+      "B": "Email is rejected and auto-reply sent to sender",
+      "C": "New incident created from the message",
+      "D": "New case is created from the message"
+    },
+    "answer": "C",
+    "explanation": "By default, if an incoming email contains no identifiable watermark or reference number, an inbound email action automatically creates a new incident from the message."
+  },
+  {
+    "number": 193,
+    "question": "On the 'Create New' change landing page in Service Operations Workspace, what class label is displayed for the Emergency change model?",
+    "options": {
+      "A": "Unauthorized",
+      "B": "Default",
+      "C": "Break/fix",
+      "D": "Out-of-the-box"
+    },
+    "answer": "C",
+    "explanation": "Emergency changes are labeled as break/fix in workspace landing views."
+  },
+  {
+    "number": 194,
+    "question": "Which organizational role is responsible for the overall administrative capabilities of a portfolio?",
+    "options": {
+      "A": "Service Manager",
+      "B": "Portfolio Manager",
+      "C": "Portfolio Owner",
+      "D": "Service Owner"
+    },
+    "answer": "B",
+    "explanation": "Portfolio Managers maintain administrative oversight across portfolios."
+  },
+  {
+    "number": 195,
+    "question": "If a change model has Write roles AND Can write defined, which users have the ability to modify the change model record? Choose 2 answers",
+    "options": {
+      "A": "Users with the itil_admin role",
+      "B": "Users with admin role",
+      "C": "Users that have the Write role(s) OR that match the Can write user criteria",
+      "D": "Users with sn_change_write role",
+      "E": "Users that have the Write role(s) AND match the Can write user criteria"
+    },
+    "answer": "B, E",
+    "explanation": "Admins override restrictions, while standard users must satisfy both write roles and user criteria when both are defined."
+  },
+  {
+    "number": 196,
+    "question": "Your customer has a catalog item for Request VPN. They would like to adjust the cart layout for only the VPN item, so the Quantity field is not displayed. How would you meet this requirement?",
+    "options": {
+      "A": "On the Cart Layout, Columns tab, unselect Quantity column",
+      "B": "On the Catalog Item, Columns tab, unselect Quantity column",
+      "C": "On the Catalog Item, Advanced View, unselect Use cart layout, select No quantity",
+      "D": "On the Catalog, Advanced View, unselect Use cart layout, select No quantity",
+      "E": "On the Catalog Item, Cart Layout Related List, set the Quantity record to Inactive"
+    },
+    "answer": "C",
+    "explanation": "Disabling the global cart layout option on specific catalog items allows hiding quantity fields."
+  },
+  {
+    "number": 197,
+    "question": "Where can a change manager define the interval frequency for unauthorized change detection?",
+    "options": {
+      "A": "The ci.change.unplanned business rule",
+      "B": "Event Processing Properties module",
+      "C": "Unauthorized Change Properties module",
+      "D": "Unauthorized change flow"
+    },
+    "answer": "C",
+    "explanation": "Unauthorized Change Properties module houses scheduling and interval parameters for detection scans."
+  },
+  {
+    "number": 198,
+    "question": "Which of the following are defined for a given change model? Choose 3 answers",
+    "options": {
+      "A": "State transition conditions",
+      "B": "State model",
+      "C": "State transitions",
+      "D": "Phase model",
+      "E": "Phase transitions"
+    },
+    "answer": "B, C, D",
+    "explanation": "Change models incorporate state models, state transitions, and phase models."
+  },
+  {
+    "number": 199,
+    "question": "In the baseline implementation, what are key relationships between Change and Configuration Item (CI) records? Choose 3 answers",
+    "options": {
+      "A": "One Change can be submitted for multiple CIs",
+      "B": "The CI Support Group is responsible for change implementations",
+      "C": "A CI can be affected by a change, even if it is not the CI being changed",
+      "D": "Changes should reference at least one CI",
+      "E": "The CI Manager is part of the change approval workflow"
+    },
+    "answer": "A, C, D",
+    "explanation": "Changes can target multiple CIs, impact secondary downstream CIs, and reference primary configuration items."
+  },
+  {
+    "number": 200,
+    "question": "On a Normal Change Model what are some examples of the Model State Transitions that are defined for the Authorize state?",
+    "options": {
+      "A": "Authorize to Draft, Authorize to Assess, Authorize to Review",
+      "B": "Authorize to Implement, Authorize to Assess, Authorize to Review",
+      "C": "Authorize to Canceled, Authorize to New, Authorize to Scheduled",
+      "D": "Authorize to Scheduled, Authorize to Closed, Authorize to New"
+    },
+    "answer": "C",
+    "explanation": "State transitions from authorization include cancellation or returning to prior states if rejected or rescheduled."
+  },
+  {
+    "number": 201,
+    "question": "Released in Quebec, what tool enables the creation of templates for Catalog Items?",
+    "options": {
+      "A": "Template Builder",
+      "B": "Template Management",
+      "C": "Catalog Wizard",
+      "D": "Catalog Builder",
+      "E": "Catalog Template Library"
+    },
+    "answer": "D",
+    "explanation": "Catalog Builder introduced intuitive template-driven creation for catalog items and request forms."
+  }
+    ];
+
+    /**
+     * Smart Normalization Engine:
+     * Automatically converts any question format (opts/ans/exp OR options/answer/explanation)
+     * into a consistent internal structure and handles any question count.
+     */
+    function normalizeQuestions(raw) {
+      return raw.map((item, index) => {
+        const id = item.id !== undefined ? item.id : index + 1;
+        const text = item.text || item.question || `Question ${index + 1}`;
+        const exp = item.exp || item.explanation || "No explanation provided for this question.";
+
+        // Handle options (array or object {A: "...", B: "..."})
+        let opts = [];
+        let rawOpts = item.opts || item.options;
+        if (Array.isArray(rawOpts)) {
+          opts = rawOpts;
+        } else if (rawOpts && typeof rawOpts === 'object') {
+          const keys = Object.keys(rawOpts).sort();
+          opts = keys.map(k => rawOpts[k]);
+        }
+
+        // Handle answers (can be number, letter like "B", array of numbers, array of letters, or string match)
+        let rawAns = item.ans !== undefined ? item.ans : (item.answer !== undefined ? item.answer : 0);
+        let ansIndices = [];
+
+        if (Array.isArray(rawAns)) {
+          ansIndices = rawAns.map(a => parseAnswerToken(a, opts));
+        } else if (typeof rawAns === 'number') {
+          ansIndices = [rawAns];
+        } else if (typeof rawAns === 'string') {
+          const parts = rawAns.split(/[,|\s]+/);
+          parts.forEach(p => {
+            const idx = parseAnswerToken(p, opts);
+            if (idx !== -1 && !ansIndices.includes(idx)) ansIndices.push(idx);
+          });
+          if (ansIndices.length === 0) ansIndices = [0];
+        } else {
+          ansIndices = [0];
+        }
+
+        // Filter out any invalid indices
+        ansIndices = ansIndices.filter(idx => idx >= 0 && idx < opts.length);
+        if (ansIndices.length === 0) ansIndices = [0];
+
+        const multi = item.multi !== undefined ? item.multi : (ansIndices.length > 1);
+
+        return {
+          id: id,
+          text: text,
+          opts: opts,
+          ans: ansIndices,
+          exp: exp,
+          multi: multi
+        };
+      });
+    }
+
+    function parseAnswerToken(token, opts) {
+      if (typeof token === 'number') return token;
+      if (typeof token === 'string') {
+        const trimmed = token.trim().toUpperCase();
+        if (trimmed.length === 1 && trimmed >= 'A' && trimmed <= 'Z') {
+          return trimmed.charCodeAt(0) - 65;
+        }
+        // Try exact option text matching
+        const matchIdx = opts.findIndex(opt => opt.trim().toLowerCase() === token.trim().toLowerCase());
+        if (matchIdx !== -1) return matchIdx;
+      }
+      return 0;
+    }
+
+    const questions = normalizeQuestions(rawQuestions);
+    const STORAGE_KEY = "servicenow_exam_user_answers_v2";
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      document.getElementById('header-subtitle').innerText = `Interactive Questionnaire • ${questions.length} Questions`;
+
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+      questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.id = `q-card-${q.id}`;
+
+        const inputType = q.multi ? 'checkbox' : 'radio';
+        const userSavedAns = savedData[q.id] || [];
+
+        let optionsHTML = '';
+        q.opts.forEach((opt, optIdx) => {
+          const isChecked = userSavedAns.includes(optIdx) ? 'checked' : '';
+          optionsHTML += `
+            <li class="option-item" id="opt-wrap-${q.id}-${optIdx}" onclick="selectOption(${q.id}, ${optIdx}, ${q.multi})">
+              <input type="${inputType}" name="q_${q.id}" id="opt-${q.id}-${optIdx}" value="${optIdx}" ${isChecked} onclick="event.stopPropagation(); handleInputClick(${q.id}, ${q.multi})">
+              <label class="option-label" for="opt-${q.id}-${optIdx}">
+                <strong>${String.fromCharCode(65 + optIdx)}.</strong> ${opt}
+              </label>
+            </li>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="q-header">
+            <span class="q-number">Question ${idx + 1} of ${questions.length}</span>
+            <span class="q-badge">${q.multi ? 'Multiple Choice (Select all that apply)' : 'Single Choice'}</span>
+          </div>
+          <div class="q-text">${q.text}</div>
+          <ul class="options-list">${optionsHTML}</ul>
+          <div class="explanation" id="exp-${q.id}">
+            <strong>Explanation:</strong> ${q.exp}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      updateProgress();
+    }
+
+    function selectOption(qId, optIdx, isMulti) {
+      const input = document.getElementById(`opt-${qId}-${optIdx}`);
+      if (!isMulti) {
+        input.checked = true;
+      } else {
+        input.checked = !input.checked;
+      }
+      saveProgress();
+    }
+
+    function handleInputClick(qId, isMulti) {
+      saveProgress();
+    }
+
+    function saveProgress() {
+      const state = {};
+      questions.forEach(q => {
+        const inputs = document.querySelectorAll(`input[name="q_${q.id}"]:checked`);
+        const selected = Array.from(inputs).map(i => parseInt(i.value));
+        if (selected.length > 0) {
+          state[q.id] = selected;
+        }
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+      
+      const saveStatus = document.getElementById('save-status');
+      saveStatus.style.opacity = '1';
+      setTimeout(() => { saveStatus.style.opacity = '0.7'; }, 1000);
+    }
+
+    function updateProgress() {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const answeredCount = Object.keys(savedData).length;
+      const total = questions.length;
+      const pct = total > 0 ? Math.round((answeredCount / total) * 100) : 0;
+
+      document.getElementById('progress-text').innerText = `${answeredCount} / ${total} Answered`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+    }
+
+    function submitExam() {
+      const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      let score = 0;
+
+      questions.forEach(q => {
+        const userAns = (savedData[q.id] || []).slice().sort();
+        const correctAns = [...q.ans].sort();
+        const card = document.getElementById(`q-card-${q.id}`);
+        const exp = document.getElementById(`exp-${q.id}`);
+
+        const isCorrect = JSON.stringify(userAns) === JSON.stringify(correctAns);
+
+        if (isCorrect) {
+          score++;
+          card.classList.add('correct-card');
+        } else {
+          card.classList.add('wrong-card');
+        }
+
+        // Highlight options
+        q.opts.forEach((_, optIdx) => {
+          const optWrap = document.getElementById(`opt-wrap-${q.id}-${optIdx}`);
+          const isTargetCorrect = correctAns.includes(optIdx);
+          const isUserSelected = userAns.includes(optIdx);
+
+          if (isTargetCorrect) {
+            optWrap.classList.add('correct-ans');
+          } else if (isUserSelected && !isTargetCorrect) {
+            optWrap.classList.add('wrong-ans');
+          }
+        });
+
+        exp.style.display = 'block';
+      });
+
+      // Display banner
+      const banner = document.getElementById('result-banner');
+      const scorePct = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
+      const passed = scorePct >= 70;
+
+      banner.className = `result-banner ${passed ? 'pass' : 'fail'}`;
+      banner.style.display = 'block';
+      document.getElementById('result-title').innerText = passed ? "Congratulations! You Passed!" : "Exam Needs Review";
+      document.getElementById('result-score').innerText = `${scorePct}%`;
+      document.getElementById('result-detail').innerText = `You correctly answered ${score} out of ${questions.length} questions. (Passing score: 70%)`;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+      if (confirm("Are you sure you want to clear all your saved answers and start fresh?")) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', renderQuestions);
+  </script>
+</body>
+</html>
