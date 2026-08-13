@@ -1558,7 +1558,7 @@
     "answer": "B",
     "explanation": "A release groups together one or more related changes for deployment."
   },
-  {
+ {
     "number": 111,
     "question": "The root cause, workaround, and a fix to a problem have been identified, but management has decided not to implement the solution. Which action does the problem coordinator take regarding the problem record?",
     "options": {
@@ -1580,7 +1580,7 @@
       "D": "sn_class_manager"
     },
     "answer": "A",
-    "explanation": "ecmdb_admin grants administrative access to the CI Class Manager."
+    "explanation": "ecmdb_admin (or admin/itil_admin) grants administrative access to the CI Class Manager."
   },
   {
     "number": 113,
@@ -1591,8 +1591,8 @@
       "C": "If the service is defined as a business service...",
       "D": "Any required CMDB relationships and dependencies must be created manually"
     },
-    "answer": "D",
-    "explanation": "CMDB relationships and dependencies for services and offerings must be established manually or through mapping tools."
+    "answer": "A",
+    "explanation": "Only parent child (service:offering) relationships are automatically created in the CMDB. Other underlying infrastructure dependencies must be mapped manually or through Service Mapping."
   },
   {
     "number": 114,
@@ -1604,7 +1604,7 @@
       "D": "Modify the choice list"
     },
     "answer": "C",
-    "explanation": "Dictionary overrides with reference qualifiers restrict selectable assignment groups based on group type."
+    "explanation": "Dictionary overrides with reference qualifiers restrict selectable assignment groups based on group type, ensuring only appropriate support groups are visible."
   },
   {
     "number": 115,
@@ -1616,7 +1616,7 @@
       "D": "Email templates are defined by users with admin role..."
     },
     "answer": "B",
-    "explanation": "Email templates apply automatically upon launch, whereas quick messages are manually selected."
+    "explanation": "Email templates apply automatically upon launch, whereas quick messages are manually selected by the user to insert predefined text."
   },
   {
     "number": 116,
@@ -1628,7 +1628,7 @@
       "D": "Installed automatically as part of new system"
     },
     "answer": "A",
-    "explanation": "Resource Management is included and activated with the PPM Standard plugin."
+    "explanation": "Resource Management is included and activated with the Project Portfolio Management (PPM) Standard plugin."
   },
   {
     "number": 117,
@@ -1640,7 +1640,7 @@
       "D": "Inputs Processes, Subprocesses and Outputs"
     },
     "answer": "C",
-    "explanation": "Flow actions are comprised of inputs, action steps, and outputs."
+    "explanation": "Flow actions in Flow Designer are comprised of Inputs, Action Steps, and Outputs."
   },
   {
     "number": 118,
@@ -1652,7 +1652,7 @@
       "D": "New, Work in progress, Escalated, Communicated"
     },
     "answer": "A",
-    "explanation": "Major incident candidates use Proposed, Accepted, Rejected, and Cancelled states."
+    "explanation": "Major incident candidates use the specific states: Proposed, Accepted, Rejected, and Cancelled."
   },
   {
     "number": 119,
@@ -1663,7 +1663,7 @@
       "C": "CIs defined directly in cmdb_ci_computer and all child classes"
     },
     "answer": "C",
-    "explanation": "Reports against a table include records from that table and all of its extended child classes."
+    "explanation": "Reports run against a base or parent table will automatically include records from that table and all of its extended child classes."
   },
   {
     "number": 120,
@@ -1675,9 +1675,9 @@
       "D": "UI policies"
     },
     "answer": "B",
-    "explanation": "Order guide rules determine which catalog items are included and presented based on user input."
+    "explanation": "Order guide rules (Rule base) determine which catalog items are dynamically included and presented based on the user's initial variable inputs."
   },
-	{
+  {
     "number": 121,
     "question": "Your customer wants to use the Normal change model, but wants to add another level of approval for changes relating to the Service, SAP Enterprise Services. What should you do to satisfy this requirement?",
     "options": {
@@ -1687,7 +1687,7 @@
       "D": "Add a new Decision to the Normal Change Workflow"
     },
     "answer": "B",
-    "explanation": "Adding a new decision within the existing Change Approval Policy allows evaluating conditions such as specific services (like SAP Enterprise Services) to trigger additional approval tiers."
+    "explanation": "Adding a new decision within the existing Change Approval Policy allows evaluating conditions such as specific services to trigger additional approval tiers."
   },
   {
     "number": 122,
@@ -1700,8 +1700,8 @@
       "E": "5 Star scale",
       "F": "Flag Article"
     },
-    "answer": "C, D, E, F",
-    "explanation": "Users can provide feedback through comments, pinning articles (if authorized), 5-star ratings, and flagging articles for review."
+    "answer": "A, C, E, F",
+    "explanation": "Users can provide feedback through the Helpful? (Yes/No) buttons, commenting, 5-star ratings, and flagging articles for review. Pinning is not a feedback mechanism."
   },
   {
     "number": 123,
@@ -1712,8 +1712,8 @@
       "C": "sn_incident_update",
       "D": "sn_incident_read"
     },
-    "answer": "B, C",
-    "explanation": "The ITSM Roles plugin introduces granular insert and update roles for core tables like incident."
+    "answer": "A, D",
+    "explanation": "The ITSM Roles plugin introduces the sn_incident_read and sn_incident_write roles to provide granular read/write access control separated from the standard itil role."
   },
   {
     "number": 124,
@@ -1724,8 +1724,8 @@
       "C": "From the Incident Properties application, set Enable auto closure of incidents based on Resolution date to Yes",
       "D": "Modify the Incident Lifecycle flow to expire after 7 days"
     },
-    "answer": "A, D",
-    "explanation": "Modifying the flow trigger and expiration timing ensures automatic closure relative to the resolution timestamp."
+    "answer": "C, D",
+    "explanation": "To meet auto-closure requirements, you set the property to calculate based on the resolution date (C) and ensure the flow/timing configuration targets the required 7-day expiration (D)."
   },
   {
     "number": 125,
@@ -1737,7 +1737,7 @@
       "D": "Incident [sn_task_incident]"
     },
     "answer": "B",
-    "explanation": "The base table for incidents in ServiceNow is incident."
+    "explanation": "The base table for incidents in ServiceNow is the 'incident' table."
   },
   {
     "number": 126,
@@ -1749,7 +1749,7 @@
       "D": "ITSM - Business Outcomes and Corresponding KPIs"
     },
     "answer": "A, B",
-    "explanation": "The Workshop Preparation Guide and Process Guide provide essential frameworks and terminology for catalog workshops."
+    "explanation": "The Workshop Preparation Guide and Process Guide provide the essential frameworks, templates, and terminology needed for catalog workshops."
   },
   {
     "number": 127,
@@ -1762,7 +1762,7 @@
       "E": "Workspaces"
     },
     "answer": "D",
-    "explanation": "Views control which fields and layout appear on a form based on context or persona."
+    "explanation": "Views control which fields and layouts appear on a form based on the context, process, or persona."
   },
   {
     "number": 128,
@@ -1774,7 +1774,7 @@
       "D": "It is not part of the baseline instance"
     },
     "answer": "A, B",
-    "explanation": "Manual categorical choices often lead to user confusion and lack the structured metadata needed for automated routing or reporting."
+    "explanation": "Manual categorical choices often lead to user confusion and lack the structured metadata (like CI relationships) needed for automated routing or precise reporting."
   },
   {
     "number": 129,
@@ -1787,7 +1787,7 @@
       "E": "Another change for the same CI, at the same time"
     },
     "answer": "B, D, E",
-    "explanation": "Change conflict engine automatically detects overlaps with blackout schedules, maintenance windows, and concurrent changes on the same CI."
+    "explanation": "The automated Change conflict engine detects overlaps with blackout schedules, maintenance windows, and concurrent scheduled changes on the same CI."
   },
   {
     "number": 130,
@@ -1799,7 +1799,7 @@
       "D": "Incidents are focused on one individual having an issue; Problems are when you have many people having the same issue"
     },
     "answer": "B",
-    "explanation": "Incidents aim to restore service quickly (workaround/fix), whereas problems investigate underlying root causes."
+    "explanation": "Incidents aim to restore service quickly via a workaround or fix, whereas problems investigate the underlying root cause to prevent recurrences."
   },
   {
     "number": 131,
@@ -1811,7 +1811,7 @@
       "D": "itil"
     },
     "answer": "B",
-    "explanation": "The itil_admin role grants elevated permissions, including deleting incident records, while maintaining security best practices."
+    "explanation": "The itil_admin role grants elevated administrative permissions within ITSM apps, including the ability to delete incident records."
   },
   {
     "number": 132,
@@ -1822,8 +1822,8 @@
       "C": "Flow activities",
       "D": "Properties"
     },
-    "answer": "C",
-    "explanation": "Flow activities provide pre-built, reusable steps within change workflows and flow designer."
+    "answer": "B",
+    "explanation": "In Flow Designer, the reusable components you place into your flow are called Flow Actions."
   },
   {
     "number": 133,
@@ -1834,8 +1834,8 @@
       "C": "Mobile service",
       "D": "Technical service"
     },
-    "answer": "A, B",
-    "explanation": "Service Portfolio Management primarily tracks and governs Business Services and Application Services."
+    "answer": "A, D",
+    "explanation": "Service Portfolio Management (SPM) primarily manages and tracks the lifecycle of Business Services and Technical Services."
   },
   {
     "number": 134,
@@ -1847,7 +1847,7 @@
       "D": "Analytics Dashboards"
     },
     "answer": "B",
-    "explanation": "Performance Analytics is integrated with limited baseline indicator content for tracking incident trends over time."
+    "explanation": "ServiceNow includes limited baseline indicator content for Performance Analytics to track incident trends over time for free."
   },
   {
     "number": 135,
@@ -1859,7 +1859,7 @@
       "D": "Change - Normal - New, Change - Normal - Review, Change - Normal - Close, Change - Implementation tasks"
     },
     "answer": "C",
-    "explanation": "Baseline normal change models utilize Assess, Authorize, and Implement subflows."
+    "explanation": "Baseline normal change models utilize Assess, Authorize, and Implement subflows for orchestration."
   },
   {
     "number": 136,
@@ -1871,7 +1871,7 @@
       "D": "Published"
     },
     "answer": "B",
-    "explanation": "Catalog Builder automatically marks the generated update set as Complete upon successful publication."
+    "explanation": "Catalog Builder automatically marks the generated background update set as Complete upon successful publication of the item."
   },
   {
     "number": 137,
@@ -1883,7 +1883,7 @@
       "D": "Manually by the user during all states, except Closed or Canceled"
     },
     "answer": "A, D",
-    "explanation": "Change tasks can be added via implementation subflows or manually during active open states."
+    "explanation": "Tasks can be generated automatically via the implementation subflows or added manually by users ad-hoc during any active open states."
   },
   {
     "number": 138,
@@ -1896,7 +1896,7 @@
       "E": "Catalog Item"
     },
     "answer": "C",
-    "explanation": "Record Producers allow users to fill out user-friendly catalog forms that generate task records like incidents."
+    "explanation": "Record Producers allow users to fill out simplified, user-friendly catalog forms that translate into operational task records like Incidents."
   },
   {
     "number": 139,
@@ -1908,7 +1908,7 @@
       "D": "Approval group"
     },
     "answer": "B",
-    "explanation": "The Support group field on the CI record populates the assignment group on related ITSM task records."
+    "explanation": "The 'Support group' designated on the CI record maps to and populates the assignment group on related ITSM task records."
   },
   {
     "number": 140,
@@ -1920,8 +1920,8 @@
       "D": "Order Guide",
       "E": "Catalog Item"
     },
-    "answer": "E",
-    "explanation": "Catalog items or content items are used in catalogs, but standard catalog items/content items link documentation or resources effectively."
+    "answer": "C",
+    "explanation": "A Content Item is used to provide a link to external URLs, knowledge articles, or other modules directly inside the Service Catalog."
   },
   {
     "number": 141,
@@ -1932,8 +1932,8 @@
       "C": "Edit system property com.snc.incident.autoclose_based_on_resolved_at",
       "D": "On Incident Properties, for Autoclose Incident Tasks, select Yes"
     },
-    "answer": "C, D",
-    "explanation": "Incident properties manage cascading closure rules and auto-closure settings for child incident tasks."
+    "answer": "A, B",
+    "explanation": "You can meet this by using the Incident Properties page to set 'Close open incident tasks when incident is closed or canceled', which activates the system property 'com.snc.incident.incident_task_closure'."
   },
   {
     "number": 142,
@@ -1945,7 +1945,7 @@
       "D": "Dependency View"
     },
     "answer": "C",
-    "explanation": "CI Class Manager provides a centralized interface for viewing and modifying CMDB class hierarchies and attributes."
+    "explanation": "The CI Class Manager provides a centralized, hierarchical interface for viewing and modifying CMDB class hierarchies and their attributes."
   },
   {
     "number": 143,
@@ -1957,7 +1957,7 @@
       "D": "Data Collection Job"
     },
     "answer": "C",
-    "explanation": "Inbound Flow Actions process incoming emails and automate the creation of incident records."
+    "explanation": "In modern ServiceNow, Inbound Flow Actions (or Inbound Email Actions) are used to process incoming emails and automate the creation or update of incident records."
   },
   {
     "number": 144,
@@ -1969,7 +1969,7 @@
       "D": "State Flows"
     },
     "answer": "B",
-    "explanation": "State Transition Models define rules, conditions, and allowed paths between change states."
+    "explanation": "State Transition Models define rules, conditions, and allowed lifecycle paths between different states for specific Change Models."
   },
   {
     "number": 145,
@@ -1981,7 +1981,7 @@
       "D": "The user criteria on the knowledge base is incorrect"
     },
     "answer": "B",
-    "explanation": "Created articles start in Draft state and must be published before appearing in searchable knowledge bases."
+    "explanation": "Articles generated from records start in a Draft state by default and must be explicitly published before appearing in the knowledge base."
   },
   {
     "number": 146,
@@ -1993,7 +1993,7 @@
       "D": "State Transitions"
     },
     "answer": "A, C",
-    "explanation": "Both Workflows and Flows in Flow Designer orchestrate catalog item fulfillment steps."
+    "explanation": "Both classic Workflows and modern Flows (via Flow Designer) are used to orchestrate the backend fulfillment steps of catalog items."
   },
   {
     "number": 147,
@@ -2005,7 +2005,7 @@
       "D": "Editor"
     },
     "answer": "A",
-    "explanation": "The Manager field on catalog categories designates administrative ownership."
+    "explanation": "The Manager field on a catalog or category designates the administrative ownership for that specific section."
   },
   {
     "number": 148,
@@ -2018,7 +2018,7 @@
       "E": "Reassignment count"
     },
     "answer": "E",
-    "explanation": "Reassignment count tracks how many times an incident's assignment group has changed, highlighting routing inefficiency."
+    "explanation": "The Reassignment count field increments every time an incident's assignment group changes, helping identify routing inefficiencies."
   },
   {
     "number": 149,
@@ -2030,8 +2030,8 @@
       "D": "Order guides",
       "E": "Record producers"
     },
-    "answer": "B, D",
-    "explanation": "Catalog Builder templates streamline the creation of catalog items and order guides."
+    "answer": "B, E",
+    "explanation": "Catalog Builder uses templates specifically to streamline the creation of Catalog Items and Record Producers."
   },
   {
     "number": 150,
@@ -2044,7 +2044,7 @@
       "E": "Portal"
     },
     "answer": "E",
-    "explanation": "The Service Portal provides a user-friendly web interface for external customers and employees to browse the catalog."
+    "explanation": "The Service Portal provides a user-friendly, web-based interface tailored for external customers and end-users to browse and consume the catalog."
   },
   {
     "number": 151,
@@ -2056,7 +2056,7 @@
       "D": "A change approval lifecycle flow"
     },
     "answer": "A",
-    "explanation": "Change approval policies establish structured decision criteria and approval requirements."
+    "explanation": "Change approval policies establish the structured decision criteria and map the exact approval requirements for different change models."
   },
   {
     "number": 152,
@@ -2068,8 +2068,8 @@
       "D": "Add the Review state to the model record",
       "E": "Add the Critical CI field to the Change Request form"
     },
-    "answer": "D, E",
-    "explanation": "Customizing change models requires adding the necessary lifecycle states and ensuring relevant fields are available on the change request form."
+    "answer": "A, D",
+    "explanation": "When customizing change models to include a new state, you must add the state to the model's transition record and modify the flow to orchestrate the backend tasks for that state."
   },
   {
     "number": 153,
@@ -2081,7 +2081,7 @@
       "D": "The problem coordinator is the only role with the ability to recall a message"
     },
     "answer": "A",
-    "explanation": "Coordinators oversee communications to ensure clarity and relevance for end-users, separating technical investigation from external communication."
+    "explanation": "Coordinators oversee communications to ensure clarity and relevance for end-users, separating raw technical investigations by analysts from external messaging."
   },
   {
     "number": 154,
@@ -2093,8 +2093,8 @@
       "D": "Record Producer Form Designer",
       "E": "Default Variables Editor"
     },
-    "answer": "D, E",
-    "explanation": "Record producer forms utilize variable editors and designers to manage question inputs."
+    "answer": "E",
+    "explanation": "The Default Variables Editor is the formatter placed on task records (like Incidents) to display the variables inputted by users from a Record Producer."
   },
   {
     "number": 155,
@@ -2107,7 +2107,7 @@
       "E": "Views"
     },
     "answer": "E",
-    "explanation": "Views determine form layout variations for different operational contexts."
+    "explanation": "Views determine form layout variations for different operational contexts, allowing you to show/hide fields based on the specific persona or situation."
   },
   {
     "number": 156,
@@ -2119,7 +2119,7 @@
       "D": "Dictionary Overrides"
     },
     "answer": "C",
-    "explanation": "Model State Transition Conditions enforce mandatory checks before state changes occur."
+    "explanation": "Model State Transition Conditions are configured on the Change Model to enforce mandatory checks (like required fields) before a state transition can occur."
   },
   {
     "number": 157,
@@ -2131,7 +2131,7 @@
       "D": "Count of Completed Changes per Month, by Category"
     },
     "answer": "A, C",
-    "explanation": "Percentage metrics tracking success and unauthorized changes over time leverage Performance Analytics historical score collection."
+    "explanation": "Percentage-based metrics over time (like % Successful or % Unauthorized) require Formula Indicators and historical data collection, which are exclusive to Performance Analytics."
   },
   {
     "number": 158,
@@ -2144,7 +2144,7 @@
       "E": "Order a case of Laundry Soap"
     },
     "answer": "A",
-    "explanation": "Order guides bundle multiple related catalog items together based on user choices, such as ordering dishes and matching cutlery."
+    "explanation": "Order guides are designed to bundle multiple distinct related items together based on user choices (e.g., ordering plates, bowls, and silverware all at once)."
   },
   {
     "number": 159,
@@ -2156,7 +2156,7 @@
       "D": "Problem can be solved by a Change"
     },
     "answer": "C, D",
-    "explanation": "Problems are resolved by implementing changes, and poorly executed changes can introduce new problems."
+    "explanation": "Problems are ultimately resolved by implementing Changes, and conversely, poorly executed Changes can cause massive issues resulting in a new Problem."
   },
   {
     "number": 160,
@@ -2168,7 +2168,7 @@
       "D": "A Change request using the Normal Change model is Low Risk and is moved to the Assess state"
     },
     "answer": "A",
-    "explanation": "Transitioning a normal change to the Assess state triggers the corresponding assess flow."
+    "explanation": "Transitioning a Normal change into the 'Assess' state acts as the condition that triggers the corresponding Assess flow in Flow Designer."
   },
   {
     "number": 161,
@@ -2180,7 +2180,7 @@
       "D": "The form design of the caller lookup form"
     },
     "answer": "A",
-    "explanation": "Reference autocomplete attributes like ref_ac_columns determine which additional fields display during lookups."
+    "explanation": "Reference autocomplete attributes (like ref_ac_columns) on the dictionary entry determine which additional identifying fields display when typing into a reference lookup."
   },
   {
     "number": 162,
@@ -2193,7 +2193,7 @@
       "E": "Catalog Item"
     },
     "answer": "A",
-    "explanation": "Content items allow embedding links, external sites, or knowledge articles directly inside the service catalog."
+    "explanation": "Content items allow you to embed direct links to external websites or internal Knowledge Articles directly inside the Service Catalog."
   },
   {
     "number": 163,
@@ -2204,8 +2204,8 @@
       "C": "The service and offerings are temporarily unavailable for consumption",
       "D": "A copy of the service is created and placed in a Draft state"
     },
-    "answer": "B",
-    "explanation": "Checking out a record creates a working draft while maintaining the active production version until published."
+    "answer": "D",
+    "explanation": "Checking out a record creates a working draft copy, maintaining the active production version's availability until the new draft is finalized and published."
   },
   {
     "number": 164,
@@ -2217,7 +2217,7 @@
       "D": "Use the SLA Definitions to add a new SLA workflow"
     },
     "answer": "B",
-    "explanation": "Flow Designer handles modern SLA notification and escalation workflows."
+    "explanation": "Modern SLA notification and escalation logic is managed entirely within Flow Designer, allowing you to easily add new actions at specific percentage intervals."
   },
   {
     "number": 165,
@@ -2228,8 +2228,8 @@
       "C": "Trigger conditions",
       "D": "Anonymize responses"
     },
-    "answer": "B, D",
-    "explanation": "Survey definitions support configuration of reminder schedules and response anonymization."
+    "answer": "A, D",
+    "explanation": "Survey definitions support configurations to allow users to decline (cancel) surveys and to enforce response anonymization natively on the record."
   },
   {
     "number": 166,
@@ -2241,7 +2241,7 @@
       "D": "Dynamic CI group"
     },
     "answer": "D",
-    "explanation": "Dynamic CI groups use query criteria to automatically group CIs dynamically."
+    "explanation": "Dynamic CI groups use automated query criteria (like 'Class = Server' and 'Location = Miami') to group CIs dynamically without manual updates."
   },
   {
     "number": 167,
@@ -2254,8 +2254,8 @@
       "E": "The requirement was not in the stories"
     },
     "answer": "A",
-    "explanation": "Activating problem best practice integration plugins sets up the dedicated known error knowledge bases and links."
-  },
+    "explanation": "Activating the Problem Management Best Practice integration plugins is required to set up the dedicated Known Error knowledge base and related UI links."
+  }.
   {
     "number": 168,
     "question": "Your customer wants to change the way Priority on Problem records is calculated based on Impact and Urgency. Which module should you use to locate and update the Priority Problem Lookup record?",
